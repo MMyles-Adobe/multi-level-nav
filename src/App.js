@@ -1,5 +1,10 @@
 import React from 'react';
-import { Provider, defaultTheme, View, Header, Content, Footer, Tabs, TabList, TabPanels, Item } from '@adobe/react-spectrum';
+import { Provider, defaultTheme, View, Header, Footer, Tabs, TabList, TabPanels, Item } from '@adobe/react-spectrum';
+import { HomeTab } from './components/tabs/HomeTab';
+import { ProductsTab } from './components/tabs/ProductsTab';
+import { ServicesTab } from './components/tabs/ServicesTab';
+import { AboutTab } from './components/tabs/AboutTab';
+import { ContactTab } from './components/tabs/ContactTab';
 import './App.css';
 
 function App() {
@@ -9,8 +14,8 @@ function App() {
         UNSAFE_style={{ 
           display: 'flex', 
           flexDirection: 'column',
-          height: '100vh',
-          width: '100vw',
+          height: '100%',
+          width: '100%',
           position: 'fixed',
           top: 0,
           left: 0,
@@ -23,36 +28,41 @@ function App() {
             <h1>Multi Level Navigation</h1>
           </View>
         </Header>
-        <Content UNSAFE_style={{ flex: 1, overflowY: 'auto' }}>
-          <View padding="size-400">
-            <Tabs aria-label="Navigation">
-              <TabList>
-                <Item key="home">Home</Item>
-                <Item key="products">Products</Item>
-                <Item key="services">Services</Item>
-                <Item key="about">About</Item>
-                <Item key="contact">Contact</Item>
-              </TabList>
-              <TabPanels>
-                <Item key="home">
-                  <View padding="size-200">Home Content</View>
-                </Item>
-                <Item key="products">
-                  <View padding="size-200">Products Content</View>
-                </Item>
-                <Item key="services">
-                  <View padding="size-200">Services Content</View>
-                </Item>
-                <Item key="about">
-                  <View padding="size-200">About Content</View>
-                </Item>
-                <Item key="contact">
-                  <View padding="size-200">Contact Content</View>
-                </Item>
-              </TabPanels>
-            </Tabs>
-          </View>
-        </Content>
+        <View 
+          UNSAFE_style={{ 
+            flex: 1,
+            display: 'flex',
+            flexDirection: 'column',
+            overflow: 'hidden'
+          }}
+        >
+          <Tabs aria-label="Navigation" UNSAFE_style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: '0 16px' }}>
+            <TabList>
+              <Item key="home">Home</Item>
+              <Item key="products">Products</Item>
+              <Item key="services">Services</Item>
+              <Item key="about">About</Item>
+              <Item key="contact">Contact</Item>
+            </TabList>
+            <TabPanels UNSAFE_style={{ flex: 1, overflow: 'auto' }}>
+              <Item key="home">
+                <HomeTab />
+              </Item>
+              <Item key="products">
+                <ProductsTab />
+              </Item>
+              <Item key="services">
+                <ServicesTab />
+              </Item>
+              <Item key="about">
+                <AboutTab />
+              </Item>
+              <Item key="contact">
+                <ContactTab />
+              </Item>
+            </TabPanels>
+          </Tabs>
+        </View>
         <Footer UNSAFE_style={{ flexShrink: 0 }}>
           <View padding="size-200">
             <p>Footer Content</p>
