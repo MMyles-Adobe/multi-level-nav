@@ -10,7 +10,7 @@ const NavigationSection = ({ title, children }) => {
       UNSAFE_style={{
         display: 'flex',
         flexDirection: 'column',
-        gap: 'var(--spectrum-global-dimension-size-100)'
+        paddingTop: 'var(--spectrum-global-dimension-size-100)'
       }}
     >
       <style>

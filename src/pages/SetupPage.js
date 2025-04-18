@@ -1,13 +1,13 @@
 import React from 'react';
 import { View, Heading } from '@adobe/react-spectrum';
 
-const SetupPage = () => {
+function SetupPage() {
   return (
-    <View padding="size-400">
+    <View>
       <Heading level={1}>Setup</Heading>
-      <p>Configure your application settings and preferences.</p>
+      <p>This is the Setup page content.</p>
     </View>
   );
-};
+}
 
 export default SetupPage; 

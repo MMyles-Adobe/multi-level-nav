@@ -1,5 +1,6 @@
-import React, { useMemo } from 'react';
-import { View, ActionButton } from '@adobe/react-spectrum';
+import React, { useMemo, useState } from 'react';
+import { View, ActionButton, ButtonGroup, Button } from '@adobe/react-spectrum';
+import { useNavigate, useLocation } from 'react-router-dom';
 import NavigationHeader from './NavigationHeader';
 import NavigationSection from './NavigationSection';
 import NavigationItem from './NavigationItem';
@@ -25,6 +26,40 @@ import Settings from '@spectrum-icons/workflow/Settings';
 import Properties from '@spectrum-icons/workflow/Properties';
 
 const SideNavigation = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [isCustomizing, setIsCustomizing] = useState(false);
+  const [itemVisibility, setItemVisibility] = useState({});
+  const [pendingVisibility, setPendingVisibility] = useState({});
+  const [hiddenItems, setHiddenItems] = useState([]);
+
+  const handleVisibilityChange = (itemId, isVisible) => {
+    setPendingVisibility(prev => ({
+      ...prev,
+      [itemId]: isVisible
+    }));
+  };
+
+  const handleSave = () => {
+    setItemVisibility(pendingVisibility);
+    // Update hidden items based on visibility state
+    const newHiddenItems = [
+      ...mainItems,
+      ...planningItems,
+      ...workItems,
+      ...monitoringItems,
+      ...peopleItems,
+      ...toolsItems
+    ].filter(item => pendingVisibility[item.id] === false);
+    setHiddenItems(newHiddenItems);
+    setIsCustomizing(false);
+  };
+
+  const handleCancel = () => {
+    setPendingVisibility(itemVisibility);
+    setIsCustomizing(false);
+  };
+
   const mainItems = useMemo(() => [
     { id: 'home', name: 'Home', icon: Home, path: '/home' },
     { id: 'quick-nav', name: 'My quick navigation', icon: PinOn, path: '/quick-nav' }
@@ -65,7 +100,18 @@ const SideNavigation = () => {
     { id: 'setup', name: 'Setup', icon: Settings, path: '/setup' }
   ], []);
 
-  const hiddenItems = useMemo(() => [], []);
+  const allItems = useMemo(() => [
+    ...mainItems,
+    ...planningItems,
+    ...workItems,
+    ...monitoringItems,
+    ...peopleItems,
+    ...toolsItems
+  ], [mainItems, planningItems, workItems, monitoringItems, peopleItems, toolsItems]);
+
+  const isItemHidden = (item) => {
+    return hiddenItems.some(hiddenItem => hiddenItem.id === item.id);
+  };
 
   return (
     <View
@@ -87,59 +133,104 @@ const SideNavigation = () => {
           gap: 'var(--spectrum-global-dimension-size-200)'
         }}
       >
-        <View>
-          {mainItems.map(item => (
-            <NavigationItem key={item.id} item={item} />
+        <View className="nav-section">
+          {mainItems.filter(item => !isItemHidden(item)).map(item => (
+            <NavigationItem
+              key={item.id}
+              item={item}
+              isCustomizing={isCustomizing}
+              onVisibilityChange={handleVisibilityChange}
+              isVisible={pendingVisibility[item.id] ?? true}
+            />
           ))}
         </View>
 
-        <NavigationSection title="Planning & Strategy">
-          <View>
-            {planningItems.map(item => (
-              <NavigationItem key={item.id} item={item} />
+        <NavigationSection title="Planning & Strategy" UNSAFE_style={{ marginTop: 'var(--spectrum-global-dimension-size-200)' }}>
+          <View className="nav-section">
+            {planningItems.filter(item => !isItemHidden(item)).map(item => (
+              <NavigationItem 
+                key={item.id} 
+                item={item} 
+                isCustomizing={isCustomizing}
+                onVisibilityChange={handleVisibilityChange}
+                isVisible={pendingVisibility[item.id] ?? true}
+              />
             ))}
           </View>
         </NavigationSection>
 
-        <NavigationSection title="Work Items">
-          <View>
-            {workItems.map(item => (
-              <NavigationItem key={item.id} item={item} />
+        <NavigationSection title="Work Items" UNSAFE_style={{ marginTop: 'var(--spectrum-global-dimension-size-200)' }}>
+          <View className="nav-section">
+            {workItems.filter(item => !isItemHidden(item)).map(item => (
+              <NavigationItem 
+                key={item.id} 
+                item={item} 
+                isCustomizing={isCustomizing}
+                onVisibilityChange={handleVisibilityChange}
+                isVisible={pendingVisibility[item.id] ?? true}
+              />
             ))}
           </View>
         </NavigationSection>
 
-        <NavigationSection title="Monitoring">
-          <View>
-            {monitoringItems.map(item => (
-              <NavigationItem key={item.id} item={item} />
+        <NavigationSection title="Monitoring" UNSAFE_style={{ marginTop: 'var(--spectrum-global-dimension-size-200)' }}>
+          <View className="nav-section">
+            {monitoringItems.filter(item => !isItemHidden(item)).map(item => (
+              <NavigationItem 
+                key={item.id} 
+                item={item} 
+                isCustomizing={isCustomizing}
+                onVisibilityChange={handleVisibilityChange}
+                isVisible={pendingVisibility[item.id] ?? true}
+              />
             ))}
           </View>
         </NavigationSection>
 
-        <NavigationSection title="People & Resourcing">
-          <View>
-            {peopleItems.map(item => (
-              <NavigationItem key={item.id} item={item} />
+        <NavigationSection title="People & Resourcing" UNSAFE_style={{ marginTop: 'var(--spectrum-global-dimension-size-200)' }}>
+          <View className="nav-section">
+            {peopleItems.filter(item => !isItemHidden(item)).map(item => (
+              <NavigationItem 
+                key={item.id} 
+                item={item} 
+                isCustomizing={isCustomizing}
+                onVisibilityChange={handleVisibilityChange}
+                isVisible={pendingVisibility[item.id] ?? true}
+              />
             ))}
           </View>
         </NavigationSection>
 
-        <NavigationSection title="Tools">
-          <View>
-            {toolsItems.map(item => (
-              <NavigationItem key={item.id} item={item} />
+        <NavigationSection title="Tools" UNSAFE_style={{ marginTop: 'var(--spectrum-global-dimension-size-200)' }}>
+          <View className="nav-section">
+            {toolsItems.filter(item => !isItemHidden(item)).map(item => (
+              <NavigationItem 
+                key={item.id} 
+                item={item} 
+                isCustomizing={isCustomizing}
+                onVisibilityChange={handleVisibilityChange}
+                isVisible={pendingVisibility[item.id] ?? true}
+              />
             ))}
           </View>
         </NavigationSection>
 
-        <NavigationSection title="Hidden items">
-          <View>
-            {hiddenItems.map(item => (
-              <NavigationItem key={item.id} item={item} />
-            ))}
-          </View>
-        </NavigationSection>
+        {hiddenItems.length > 0 && (
+          <NavigationSection title="Hidden items" UNSAFE_style={{ marginTop: 'var(--spectrum-global-dimension-size-200)' }}>
+            <View className="nav-section">
+              {hiddenItems.map(item => (
+                <NavigationItem
+                  key={item.id}
+                  item={item}
+                  isCustomizing={isCustomizing}
+                  onVisibilityChange={handleVisibilityChange}
+                  isHiddenItem={true}
+                  isVisible={pendingVisibility[item.id] ?? true}
+                />
+              ))}
+            </View>
+          </NavigationSection>
+        )}
       </View>
       <View
         UNSAFE_style={{
@@ -148,17 +239,27 @@ const SideNavigation = () => {
           backgroundColor: 'var(--spectrum-global-color-gray-50)'
         }}
       >
-        <ActionButton
-          isQuiet
-          onPress={() => {}}
-          UNSAFE_style={{
-            width: '100%',
-            justifyContent: 'flex-start'
-          }}
-        >
-          <Properties />
-          <View marginStart="size-100">Customize</View>
-        </ActionButton>
+        {isCustomizing ? (
+          <ButtonGroup>
+            <Button variant="secondary" onPress={handleCancel}>Cancel</Button>
+            <Button variant="cta" onPress={handleSave}>Save</Button>
+          </ButtonGroup>
+        ) : (
+          <ActionButton
+            isQuiet
+            onPress={() => {
+              setPendingVisibility(itemVisibility);
+              setIsCustomizing(true);
+            }}
+            UNSAFE_style={{
+              width: '100%',
+              justifyContent: 'flex-start'
+            }}
+          >
+            <Properties />
+            <View marginStart="size-100">Customize</View>
+          </ActionButton>
+        )}
       </View>
     </View>
   );

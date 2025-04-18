@@ -1,20 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Text, ActionButton } from '@adobe/react-spectrum';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Visibility from '@spectrum-icons/workflow/Visibility';
 import VisibilityOff from '@spectrum-icons/workflow/VisibilityOff';
 
-const NavigationItem = ({ item, isCustomizing, onVisibilityChange, isHiddenItem = false }) => {
+const NavigationItem = ({ item, isCustomizing, onVisibilityChange, isHiddenItem = false, isVisible = true }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const isSelected = location.pathname === item.path;
-  const [isVisible, setIsVisible] = useState(item.isVisible !== false);
-
-  useEffect(() => {
-    if (onVisibilityChange) {
-      onVisibilityChange(item.id, isVisible);
-    }
-  }, [isVisible, item.id, onVisibilityChange]);
 
   const showVisibilityButton = isCustomizing && item.id !== 'home' && item.id !== 'quick-nav';
   const itemStyles = {
@@ -38,7 +31,9 @@ const NavigationItem = ({ item, isCustomizing, onVisibilityChange, isHiddenItem 
   };
 
   const handleVisibilityToggle = () => {
-    setIsVisible(!isVisible);
+    if (onVisibilityChange) {
+      onVisibilityChange(item.id, !isVisible);
+    }
   };
 
   const Icon = item.icon;
