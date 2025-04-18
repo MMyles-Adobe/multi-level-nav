@@ -1,9 +1,11 @@
-import React from 'react';
-import { View, Item, ListView, Text } from '@adobe/react-spectrum';
+import React, { useState } from 'react';
+import { View, Checkbox } from '@adobe/react-spectrum';
 import NavigationHeader from './NavigationHeader';
 import NavigationSection from './NavigationSection';
 
 const SideNavigation = () => {
+  const [selectedItem, setSelectedItem] = useState(null);
+
   const mainItems = [
     { id: 'home', name: 'Home' }
   ];
@@ -17,6 +19,38 @@ const SideNavigation = () => {
     { id: 'about', name: 'About' },
     { id: 'contact', name: 'Contact' }
   ];
+
+  const itemStyles = {
+    padding: '6px var(--spectrum-global-dimension-size-150)',
+    cursor: 'pointer',
+    borderRadius: 0,
+    ':hover': {
+      backgroundColor: 'var(--spectrum-alias-highlight-hover)'
+    }
+  };
+
+  const handleItemSelect = (itemId) => {
+    setSelectedItem(itemId);
+  };
+
+  const renderNavigationItem = (item) => (
+    <View 
+      key={item.id} 
+      UNSAFE_style={itemStyles}
+      onClick={() => handleItemSelect(item.id)}
+    >
+      <Checkbox
+        isSelected={selectedItem === item.id}
+        onChange={() => handleItemSelect(item.id)}
+        UNSAFE_style={{
+          '--spectrum-checkbox-border-color': 'var(--spectrum-global-color-gray-500)',
+          '--spectrum-checkbox-box-border-radius': '2px'
+        }}
+      >
+        {item.name}
+      </Checkbox>
+    </View>
+  );
 
   return (
     <View
@@ -38,55 +72,20 @@ const SideNavigation = () => {
           gap: 'var(--spectrum-global-dimension-size-200)'
         }}
       >
-        <ListView
-          aria-label="Main Navigation"
-          items={mainItems}
-          selectionMode="single"
-          UNSAFE_style={{
-            gap: 'var(--spectrum-global-dimension-size-100)'
-          }}
-        >
-          {(item) => (
-            <Item key={item.id} textValue={item.name}>
-              <Text>{item.name}</Text>
-            </Item>
-          )}
-        </ListView>
+        <View>
+          {mainItems.map(renderNavigationItem)}
+        </View>
 
         <NavigationSection title="Section 1">
-          <ListView
-            aria-label="Section 1 Navigation"
-            items={section1Items}
-            selectionMode="single"
-            UNSAFE_style={{
-              gap: 'var(--spectrum-global-dimension-size-100)',
-              paddingLeft: 'var(--spectrum-global-dimension-size-200)'
-            }}
-          >
-            {(item) => (
-              <Item key={item.id} textValue={item.name}>
-                <Text>{item.name}</Text>
-              </Item>
-            )}
-          </ListView>
+          <View>
+            {section1Items.map(renderNavigationItem)}
+          </View>
         </NavigationSection>
 
         <NavigationSection title="Section 2">
-          <ListView
-            aria-label="Section 2 Navigation"
-            items={section2Items}
-            selectionMode="single"
-            UNSAFE_style={{
-              gap: 'var(--spectrum-global-dimension-size-100)',
-              paddingLeft: 'var(--spectrum-global-dimension-size-200)'
-            }}
-          >
-            {(item) => (
-              <Item key={item.id} textValue={item.name}>
-                <Text>{item.name}</Text>
-              </Item>
-            )}
-          </ListView>
+          <View>
+            {section2Items.map(renderNavigationItem)}
+          </View>
         </NavigationSection>
       </View>
     </View>

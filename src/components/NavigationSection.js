@@ -13,16 +13,28 @@ const NavigationSection = ({ title, children }) => {
         gap: 'var(--spectrum-global-dimension-size-100)'
       }}
     >
+      <style>
+        {`
+          .spectrum-ActionButton-label {
+            text-align: left !important;
+          }
+          .custom-action-button {
+            padding: 8px 0px 8px 5px !important;
+          }
+        `}
+      </style>
       <ActionButton
         onPress={() => setIsExpanded(!isExpanded)}
+        UNSAFE_className="custom-action-button"
         UNSAFE_style={{
           display: 'flex',
           alignItems: 'center',
-          gap: 'var(--spectrum-global-dimension-size-100)',
-          padding: 'var(--spectrum-global-dimension-size-100)',
+          gap: '0',
           backgroundColor: 'transparent',
           border: 'none',
-          cursor: 'pointer'
+          cursor: 'pointer',
+          width: '100%',
+          justifyContent: 'flex-start'
         }}
       >
         <ChevronRight
@@ -33,11 +45,11 @@ const NavigationSection = ({ title, children }) => {
         />
         <Text
           UNSAFE_style={{
-            fontSize: 'var(--spectrum-global-dimension-font-size-75)',
+            fontSize: '14px',
             fontWeight: 'var(--spectrum-global-font-weight-bold)',
             color: 'var(--spectrum-global-color-gray-700)',
-            textTransform: 'uppercase',
-            letterSpacing: '0.06em'
+            letterSpacing: '0.06em',
+            textAlign: 'left'
           }}
         >
           {title}
