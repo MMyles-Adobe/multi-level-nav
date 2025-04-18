@@ -1,10 +1,10 @@
 import React, { useMemo } from 'react';
-import { View } from '@adobe/react-spectrum';
+import { View, ActionButton } from '@adobe/react-spectrum';
 import NavigationHeader from './NavigationHeader';
 import NavigationSection from './NavigationSection';
 import NavigationItem from './NavigationItem';
 import Home from '@spectrum-icons/workflow/Home';
-import Star from '@spectrum-icons/workflow/Star';
+import PinOn from '@spectrum-icons/workflow/PinOn';
 import Folder from '@spectrum-icons/workflow/Folder';
 import TaskList from '@spectrum-icons/workflow/TaskList';
 import Calendar from '@spectrum-icons/workflow/Calendar';
@@ -22,11 +22,12 @@ import Group from '@spectrum-icons/workflow/Group';
 import Clock from '@spectrum-icons/workflow/Clock';
 import UserGroup from '@spectrum-icons/workflow/UserGroup';
 import Settings from '@spectrum-icons/workflow/Settings';
+import Properties from '@spectrum-icons/workflow/Properties';
 
 const SideNavigation = () => {
   const mainItems = useMemo(() => [
     { id: 'home', name: 'Home', icon: Home, path: '/home' },
-    { id: 'quick-nav', name: 'My quick navigation', icon: Star, path: '/quick-nav' }
+    { id: 'quick-nav', name: 'My quick navigation', icon: PinOn, path: '/quick-nav' }
   ], []);
 
   const planningItems = useMemo(() => [
@@ -139,6 +140,25 @@ const SideNavigation = () => {
             ))}
           </View>
         </NavigationSection>
+      </View>
+      <View
+        UNSAFE_style={{
+          borderTop: '1px solid var(--spectrum-global-color-gray-200)',
+          padding: 'var(--spectrum-global-dimension-size-200)',
+          backgroundColor: 'var(--spectrum-global-color-gray-50)'
+        }}
+      >
+        <ActionButton
+          isQuiet
+          onPress={() => {}}
+          UNSAFE_style={{
+            width: '100%',
+            justifyContent: 'flex-start'
+          }}
+        >
+          <Properties />
+          <View marginStart="size-100">Customize</View>
+        </ActionButton>
       </View>
     </View>
   );
