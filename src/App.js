@@ -31,26 +31,21 @@ import SetupPage from './pages/SetupPage';
 
 function App() {
   return (
-    <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+    <BrowserRouter basename="/multi-level-nav">
       <Provider theme={defaultTheme}>
         <View
           UNSAFE_style={{
             display: 'flex',
-            height: '100%',
-            width: '100%',
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0
+            height: '100vh',
+            width: '100vw'
           }}
         >
           <SideNavigation />
           <View
             UNSAFE_style={{
               flex: 1,
-              padding: 'var(--spectrum-global-dimension-size-400)',
-              overflow: 'auto'
+              overflow: 'auto',
+              padding: 'var(--spectrum-global-dimension-size-400)'
             }}
           >
             <Routes>
