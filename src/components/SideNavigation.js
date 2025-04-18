@@ -1,56 +1,30 @@
-import React, { useState } from 'react';
-import { View, Checkbox } from '@adobe/react-spectrum';
+import React, { useMemo } from 'react';
+import { View } from '@adobe/react-spectrum';
 import NavigationHeader from './NavigationHeader';
 import NavigationSection from './NavigationSection';
+import NavigationItem from './NavigationItem';
+import Home from '@spectrum-icons/workflow/Home';
+import ShoppingCart from '@spectrum-icons/workflow/ShoppingCart';
+import Apps from '@spectrum-icons/workflow/Apps';
+import Info from '@spectrum-icons/workflow/Info';
+import User from '@spectrum-icons/workflow/User';
+import Star from '@spectrum-icons/workflow/Star';
 
 const SideNavigation = () => {
-  const [selectedItem, setSelectedItem] = useState(null);
+  const mainItems = useMemo(() => [
+    { id: 'home', name: 'Home', icon: Home, path: '/home' },
+    { id: 'quick-nav', name: 'My quick navigation', icon: Star, path: '/quick-nav' }
+  ], []);
 
-  const mainItems = [
-    { id: 'home', name: 'Home' }
-  ];
+  const section1Items = useMemo(() => [
+    { id: 'products', name: 'Products', icon: ShoppingCart, path: '/products' },
+    { id: 'services', name: 'Services', icon: Apps, path: '/services' }
+  ], []);
 
-  const section1Items = [
-    { id: 'products', name: 'Products' },
-    { id: 'services', name: 'Services' }
-  ];
-
-  const section2Items = [
-    { id: 'about', name: 'About' },
-    { id: 'contact', name: 'Contact' }
-  ];
-
-  const itemStyles = {
-    padding: '6px var(--spectrum-global-dimension-size-150)',
-    cursor: 'pointer',
-    borderRadius: 0,
-    ':hover': {
-      backgroundColor: 'var(--spectrum-alias-highlight-hover)'
-    }
-  };
-
-  const handleItemSelect = (itemId) => {
-    setSelectedItem(itemId);
-  };
-
-  const renderNavigationItem = (item) => (
-    <View 
-      key={item.id} 
-      UNSAFE_style={itemStyles}
-      onClick={() => handleItemSelect(item.id)}
-    >
-      <Checkbox
-        isSelected={selectedItem === item.id}
-        onChange={() => handleItemSelect(item.id)}
-        UNSAFE_style={{
-          '--spectrum-checkbox-border-color': 'var(--spectrum-global-color-gray-500)',
-          '--spectrum-checkbox-box-border-radius': '2px'
-        }}
-      >
-        {item.name}
-      </Checkbox>
-    </View>
-  );
+  const section2Items = useMemo(() => [
+    { id: 'about', name: 'About', icon: Info, path: '/about' },
+    { id: 'contact', name: 'Contact', icon: User, path: '/contact' }
+  ], []);
 
   return (
     <View
@@ -73,18 +47,24 @@ const SideNavigation = () => {
         }}
       >
         <View>
-          {mainItems.map(renderNavigationItem)}
+          {mainItems.map(item => (
+            <NavigationItem key={item.id} item={item} />
+          ))}
         </View>
 
         <NavigationSection title="Section 1">
           <View>
-            {section1Items.map(renderNavigationItem)}
+            {section1Items.map(item => (
+              <NavigationItem key={item.id} item={item} />
+            ))}
           </View>
         </NavigationSection>
 
         <NavigationSection title="Section 2">
           <View>
-            {section2Items.map(renderNavigationItem)}
+            {section2Items.map(item => (
+              <NavigationItem key={item.id} item={item} />
+            ))}
           </View>
         </NavigationSection>
       </View>

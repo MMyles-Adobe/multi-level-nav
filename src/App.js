@@ -1,20 +1,21 @@
 import React from 'react';
-import { Provider, defaultTheme, View, Header, Footer, Tabs, TabList, TabPanels, Item } from '@adobe/react-spectrum';
-import { HomeTab } from './components/tabs/HomeTab';
-import { ProductsTab } from './components/tabs/ProductsTab';
-import { ServicesTab } from './components/tabs/ServicesTab';
-import { AboutTab } from './components/tabs/AboutTab';
-import { ContactTab } from './components/tabs/ContactTab';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { Provider, defaultTheme } from '@adobe/react-spectrum';
 import SideNavigation from './components/SideNavigation';
-import './App.css';
+import { View } from '@adobe/react-spectrum';
+import HomePage from './pages/HomePage';
+import QuickNavPage from './pages/QuickNavPage';
+import ProductsPage from './pages/ProductsPage';
+import ServicesPage from './pages/ServicesPage';
+import AboutPage from './pages/AboutPage';
+import ContactPage from './pages/ContactPage';
 
 function App() {
   return (
     <Provider theme={defaultTheme}>
-      <View 
-        UNSAFE_style={{ 
-          display: 'flex', 
-          flexDirection: 'row',
+      <View
+        UNSAFE_style={{
+          display: 'flex',
           height: '100%',
           width: '100%',
           position: 'fixed',
@@ -25,59 +26,22 @@ function App() {
         }}
       >
         <SideNavigation />
-        <View 
-          UNSAFE_style={{ 
-            display: 'flex',
-            flexDirection: 'column',
+        <View
+          UNSAFE_style={{
             flex: 1,
-            overflow: 'hidden'
+            padding: 'var(--spectrum-global-dimension-size-400)',
+            overflow: 'auto'
           }}
         >
-          <Header UNSAFE_style={{ flexShrink: 0 }}>
-            <View padding="size-200">
-              <h1>Multi Level Navigation</h1>
-            </View>
-          </Header>
-          <View 
-            UNSAFE_style={{ 
-              flex: 1,
-              display: 'flex',
-              flexDirection: 'column',
-              overflow: 'hidden'
-            }}
-          >
-            <Tabs aria-label="Navigation" UNSAFE_style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: '0 16px' }}>
-              <TabList>
-                <Item key="home">Home</Item>
-                <Item key="products">Products</Item>
-                <Item key="services">Services</Item>
-                <Item key="about">About</Item>
-                <Item key="contact">Contact</Item>
-              </TabList>
-              <TabPanels UNSAFE_style={{ flex: 1, overflow: 'auto' }}>
-                <Item key="home">
-                  <HomeTab />
-                </Item>
-                <Item key="products">
-                  <ProductsTab />
-                </Item>
-                <Item key="services">
-                  <ServicesTab />
-                </Item>
-                <Item key="about">
-                  <AboutTab />
-                </Item>
-                <Item key="contact">
-                  <ContactTab />
-                </Item>
-              </TabPanels>
-            </Tabs>
-          </View>
-          <Footer UNSAFE_style={{ flexShrink: 0 }}>
-            <View padding="size-200">
-              <p>Footer Content</p>
-            </View>
-          </Footer>
+          <Routes>
+            <Route path="/" element={<Navigate to="/home" replace />} />
+            <Route path="/home" element={<HomePage />} />
+            <Route path="/quick-nav" element={<QuickNavPage />} />
+            <Route path="/products" element={<ProductsPage />} />
+            <Route path="/services" element={<ServicesPage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/contact" element={<ContactPage />} />
+          </Routes>
         </View>
       </View>
     </Provider>
