@@ -1,14 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text, ActionButton } from '@adobe/react-spectrum';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Visibility from '@spectrum-icons/workflow/Visibility';
 import VisibilityOff from '@spectrum-icons/workflow/VisibilityOff';
 
-const NavigationItem = ({ item, isCustomizing }) => {
+const NavigationItem = ({ item, isCustomizing, onVisibilityChange, isHiddenItem = false }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const isSelected = location.pathname === item.path;
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState(item.isVisible !== false);
+
+  useEffect(() => {
+    if (onVisibilityChange) {
+      onVisibilityChange(item.id, isVisible);
+    }
+  }, [isVisible, item.id, onVisibilityChange]);
 
   const showVisibilityButton = isCustomizing && item.id !== 'home' && item.id !== 'quick-nav';
   const itemStyles = {
@@ -16,17 +22,17 @@ const NavigationItem = ({ item, isCustomizing }) => {
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: showVisibilityButton ? '1px var(--spectrum-global-dimension-size-150) 0' : '6px var(--spectrum-global-dimension-size-150)',
-    cursor: isVisible ? 'pointer' : 'not-allowed',
+    cursor: isHiddenItem || isVisible ? 'pointer' : 'not-allowed',
     borderRadius: 0,
     backgroundColor: isSelected ? 'var(--spectrum-alias-highlight-selected)' : 'transparent',
-    opacity: isVisible ? 1 : 0.5,
+    opacity: (!isVisible) ? '0.5' : '1',
     ':hover': {
-      backgroundColor: isVisible ? 'var(--spectrum-alias-highlight-hover)' : 'transparent'
+      backgroundColor: (isHiddenItem || isVisible) ? 'var(--spectrum-alias-highlight-hover)' : 'transparent'
     }
   };
 
   const handleClick = () => {
-    if (isVisible) {
+    if (isHiddenItem || isVisible) {
       navigate(item.path);
     }
   };
@@ -53,7 +59,13 @@ const NavigationItem = ({ item, isCustomizing }) => {
         <Text>{item.name}</Text>
       </div>
       {showVisibilityButton && (
-        <ActionButton isQuiet onPress={handleVisibilityToggle}>
+        <ActionButton 
+          isQuiet 
+          onPress={handleVisibilityToggle}
+          UNSAFE_style={{
+            opacity: (!isVisible) ? '0.5' : '1'
+          }}
+        >
           {isVisible ? <Visibility size="S" /> : <VisibilityOff size="S" />}
         </ActionButton>
       )}
