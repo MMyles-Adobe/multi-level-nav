@@ -73,7 +73,13 @@ const NavigationItem = ({ item, isCustomizing, onVisibilityChange, isHiddenItem 
             <div 
               role="button"
               tabIndex={0}
-              style={{ cursor: isHiddenItem || isVisible ? 'pointer' : 'not-allowed' }}
+              style={{ 
+                cursor: isHiddenItem || isVisible ? 'pointer' : 'not-allowed',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                height: '100%'
+              }}
             >
               <ChevronRight size="S" />
             </div>
@@ -97,9 +103,10 @@ const NavigationItem = ({ item, isCustomizing, onVisibilityChange, isHiddenItem 
           triggerRef={triggerRef}
           placement="right top"
           offset={8}
+          crossOffset={-20}
         >
           <View padding="size-200">
-            <QuickNavPage />
+            <QuickNavPage onClose={() => state.close()} />
           </View>
         </Popover>
       )}
