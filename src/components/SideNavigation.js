@@ -24,6 +24,30 @@ import Clock from '@spectrum-icons/workflow/Clock';
 import UserGroup from '@spectrum-icons/workflow/UserGroup';
 import Settings from '@spectrum-icons/workflow/Settings';
 import Properties from '@spectrum-icons/workflow/Properties';
+import navigationConfig from '../config/navigationConfig.json';
+
+const iconMap = {
+  Home,
+  PinOn,
+  Folder,
+  TaskList,
+  Calendar,
+  Table,
+  Document,
+  FolderOpen,
+  GraphTrend,
+  Campaign,
+  Project,
+  Help,
+  Dashboard,
+  Report,
+  User,
+  Group,
+  Clock,
+  UserGroup,
+  Settings,
+  Properties
+};
 
 const SideNavigation = () => {
   const navigate = useNavigate();
@@ -44,12 +68,12 @@ const SideNavigation = () => {
     setItemVisibility(pendingVisibility);
     // Update hidden items based on visibility state
     const newHiddenItems = [
-      ...mainItems,
-      ...planningItems,
-      ...workItems,
-      ...monitoringItems,
-      ...peopleItems,
-      ...toolsItems
+      ...navigationConfig.mainItems,
+      ...navigationConfig.planningItems,
+      ...navigationConfig.workItems,
+      ...navigationConfig.monitoringItems,
+      ...navigationConfig.peopleItems,
+      ...navigationConfig.toolsItems
     ].filter(item => pendingVisibility[item.id] === false);
     setHiddenItems(newHiddenItems);
     setIsCustomizing(false);
@@ -60,45 +84,19 @@ const SideNavigation = () => {
     setIsCustomizing(false);
   };
 
-  const mainItems = useMemo(() => [
-    { id: 'home', name: 'Home', icon: Home, path: '/home' },
-    { id: 'quick-nav', name: 'My quick navigation', icon: PinOn, path: '/quick-nav' }
-  ], []);
+  const mapItemsWithIcons = (items) => {
+    return items.map(item => ({
+      ...item,
+      icon: iconMap[item.icon]
+    }));
+  };
 
-  const planningItems = useMemo(() => [
-    { id: 'workspaces', name: 'Workspaces', icon: Folder, path: '/workspaces' },
-    { id: 'prioritize', name: 'Prioritize', icon: TaskList, path: '/prioritize' },
-    { id: 'boards', name: 'Boards', icon: Table, path: '/boards' },
-    { id: 'calendars', name: 'Calendars', icon: Calendar, path: '/calendars' },
-    { id: 'blueprints', name: 'Blueprints', icon: Document, path: '/blueprints' }
-  ], []);
-
-  const workItems = useMemo(() => [
-    { id: 'portfolios', name: 'Portfolios', icon: FolderOpen, path: '/portfolios' },
-    { id: 'programs', name: 'Programs', icon: GraphTrend, path: '/programs' },
-    { id: 'campaigns', name: 'Campaigns', icon: Campaign, path: '/campaigns' },
-    { id: 'projects', name: 'Projects', icon: Project, path: '/projects' },
-    { id: 'documents', name: 'Documents', icon: Document, path: '/documents' },
-    { id: 'requests', name: 'Requests', icon: Help, path: '/requests' }
-  ], []);
-
-  const monitoringItems = useMemo(() => [
-    { id: 'dashboards', name: 'Dashboards', icon: Dashboard, path: '/dashboards' },
-    { id: 'reports', name: 'Reports', icon: Report, path: '/reports' },
-    { id: 'analytics', name: 'Analytics', icon: GraphTrend, path: '/analytics' }
-  ], []);
-
-  const peopleItems = useMemo(() => [
-    { id: 'users', name: 'Users', icon: User, path: '/users' },
-    { id: 'teams', name: 'Teams', icon: Group, path: '/teams' },
-    { id: 'timesheets', name: 'Timesheets', icon: Clock, path: '/timesheets' },
-    { id: 'resourcing', name: 'Resourcing', icon: UserGroup, path: '/resourcing' },
-    { id: 'people-calendars', name: 'Calendars', icon: Calendar, path: '/calendars' }
-  ], []);
-
-  const toolsItems = useMemo(() => [
-    { id: 'setup', name: 'Setup', icon: Settings, path: '/setup' }
-  ], []);
+  const mainItems = useMemo(() => mapItemsWithIcons(navigationConfig.mainItems), []);
+  const planningItems = useMemo(() => mapItemsWithIcons(navigationConfig.planningItems), []);
+  const workItems = useMemo(() => mapItemsWithIcons(navigationConfig.workItems), []);
+  const monitoringItems = useMemo(() => mapItemsWithIcons(navigationConfig.monitoringItems), []);
+  const peopleItems = useMemo(() => mapItemsWithIcons(navigationConfig.peopleItems), []);
+  const toolsItems = useMemo(() => mapItemsWithIcons(navigationConfig.toolsItems), []);
 
   const allItems = useMemo(() => [
     ...mainItems,

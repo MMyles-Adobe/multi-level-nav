@@ -1,0 +1,146 @@
+{
+  "mainItems": [
+    {
+      "id": "home",
+      "name": "Home",
+      "icon": "Home",
+      "path": "/home"
+    },
+    {
+      "id": "quick-nav",
+      "name": "My quick navigation",
+      "icon": "PinOn",
+      "path": "/quick-nav"
+    }
+  ],
+  "planningItems": [
+    {
+      "id": "workspaces",
+      "name": "Workspaces",
+      "icon": "Folder",
+      "path": "/workspaces"
+    },
+    {
+      "id": "prioritize",
+      "name": "Prioritize",
+      "icon": "TaskList",
+      "path": "/prioritize"
+    },
+    {
+      "id": "boards",
+      "name": "Boards",
+      "icon": "Table",
+      "path": "/boards"
+    },
+    {
+      "id": "calendars",
+      "name": "Calendars",
+      "icon": "Calendar",
+      "path": "/calendars"
+    },
+    {
+      "id": "blueprints",
+      "name": "Blueprints",
+      "icon": "Document",
+      "path": "/blueprints"
+    }
+  ],
+  "workItems": [
+    {
+      "id": "portfolios",
+      "name": "Portfolios",
+      "icon": "FolderOpen",
+      "path": "/portfolios"
+    },
+    {
+      "id": "programs",
+      "name": "Programs",
+      "icon": "GraphTrend",
+      "path": "/programs"
+    },
+    {
+      "id": "campaigns",
+      "name": "Campaigns",
+      "icon": "Campaign",
+      "path": "/campaigns"
+    },
+    {
+      "id": "projects",
+      "name": "Projects",
+      "icon": "Project",
+      "path": "/projects"
+    },
+    {
+      "id": "documents",
+      "name": "Documents",
+      "icon": "Document",
+      "path": "/documents"
+    },
+    {
+      "id": "requests",
+      "name": "Requests",
+      "icon": "Help",
+      "path": "/requests"
+    }
+  ],
+  "monitoringItems": [
+    {
+      "id": "dashboards",
+      "name": "Dashboards",
+      "icon": "Dashboard",
+      "path": "/dashboards"
+    },
+    {
+      "id": "reports",
+      "name": "Reports",
+      "icon": "Report",
+      "path": "/reports"
+    },
+    {
+      "id": "analytics",
+      "name": "Analytics",
+      "icon": "GraphTrend",
+      "path": "/analytics"
+    }
+  ],
+  "peopleItems": [
+    {
+      "id": "users",
+      "name": "Users",
+      "icon": "User",
+      "path": "/users"
+    },
+    {
+      "id": "teams",
+      "name": "Teams",
+      "icon": "Group",
+      "path": "/teams"
+    },
+    {
+      "id": "timesheets",
+      "name": "Timesheets",
+      "icon": "Clock",
+      "path": "/timesheets"
+    },
+    {
+      "id": "resourcing",
+      "name": "Resourcing",
+      "icon": "UserGroup",
+      "path": "/resourcing"
+    },
+    {
+      "id": "people-calendars",
+      "name": "Calendars",
+      "icon": "Calendar",
+      "path": "/calendars"
+    }
+  ],
+  "toolsItems": [
+    {
+      "id": "setup",
+      "name": "Setup",
+      "icon": "Settings",
+      "path": "/setup"
+    }
+  ]
+} 

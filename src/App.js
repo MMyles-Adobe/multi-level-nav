@@ -31,23 +31,17 @@ import SetupPage from './pages/SetupPage';
 
 function App() {
   return (
-    <BrowserRouter basename="/multi-level-nav">
-      <Provider theme={defaultTheme}>
-        <View
-          UNSAFE_style={{
-            display: 'flex',
-            height: '100vh',
-            width: '100vw'
-          }}
-        >
+    <Provider theme={defaultTheme}>
+      <BrowserRouter 
+        basename="/multi-level-nav"
+        future={{
+          v7_startTransition: true,
+          v7_relativeSplatPath: true
+        }}
+      >
+        <div style={{ display: 'flex', height: '100vh' }}>
           <SideNavigation />
-          <View
-            UNSAFE_style={{
-              flex: 1,
-              overflow: 'auto',
-              padding: 'var(--spectrum-global-dimension-size-400)'
-            }}
-          >
+          <main style={{ flex: 1, padding: '20px', overflow: 'auto' }}>
             <Routes>
               <Route path="/" element={<Navigate to="/home" replace />} />
               <Route path="/home" element={<HomePage />} />
@@ -76,10 +70,10 @@ function App() {
               <Route path="/resourcing" element={<ResourcingPage />} />
               <Route path="/setup" element={<SetupPage />} />
             </Routes>
-          </View>
-        </View>
-      </Provider>
-    </BrowserRouter>
+          </main>
+        </div>
+      </BrowserRouter>
+    </Provider>
   );
 }
 
