@@ -24,7 +24,7 @@ import Clock from '@spectrum-icons/workflow/Clock';
 import UserGroup from '@spectrum-icons/workflow/UserGroup';
 import Settings from '@spectrum-icons/workflow/Settings';
 import Properties from '@spectrum-icons/workflow/Properties';
-import navigationConfig from '../config/navigationConfig.json';
+import navigationConfig from '../config/navMain.json';
 
 const iconMap = {
   Home,
