@@ -1,0 +1,150 @@
+{
+  "mainItems": [
+    {
+      "id": "home",
+      "name": "Home",
+      "icon": "Home",
+      "path": "/"
+    },
+    {
+      "id": "quick-nav",
+      "name": "My quick navigation",
+      "icon": "PinOn",
+      "path": "/quick-nav"
+    }
+  ],
+  "setupItems": [
+    {
+      "id": "project-preferences",
+      "name": "Project preferences",
+      "icon": "Settings",
+      "path": "/setup/project-preferences"
+    },
+    {
+      "id": "processes",
+      "name": "Processes",
+      "icon": "Properties",
+      "path": "/setup/processes"
+    },
+    {
+      "id": "custom-forms",
+      "name": "Custom forms",
+      "icon": "Document",
+      "path": "/setup/custom-forms"
+    },
+    {
+      "id": "job-roles",
+      "name": "Job roles",
+      "icon": "User",
+      "path": "/setup/job-roles"
+    },
+    {
+      "id": "teams",
+      "name": "Teams",
+      "icon": "Group",
+      "path": "/setup/teams"
+    },
+    {
+      "id": "groups",
+      "name": "Groups",
+      "icon": "UserGroup",
+      "path": "/setup/groups"
+    },
+    {
+      "id": "companies",
+      "name": "Companies",
+      "icon": "Folder",
+      "path": "/setup/companies"
+    },
+    {
+      "id": "login-as",
+      "name": "Log in as",
+      "icon": "User",
+      "path": "/setup/login-as"
+    },
+    {
+      "id": "resource-management",
+      "name": "Resource management",
+      "icon": "UserGroup",
+      "path": "/setup/resource-management"
+    },
+    {
+      "id": "schedules",
+      "name": "Schedules",
+      "icon": "Calendar",
+      "path": "/setup/schedules"
+    },
+    {
+      "id": "timesheets-hours",
+      "name": "Timesheets & hours",
+      "icon": "Clock",
+      "path": "/setup/timesheets-hours"
+    },
+    {
+      "id": "email",
+      "name": "Email",
+      "icon": "Document",
+      "path": "/setup/email"
+    },
+    {
+      "id": "scorecards",
+      "name": "Scorecards",
+      "icon": "Dashboard",
+      "path": "/setup/scorecards"
+    },
+    {
+      "id": "expense-types",
+      "name": "Expense types",
+      "icon": "Document",
+      "path": "/setup/expense-types"
+    },
+    {
+      "id": "risk-types",
+      "name": "Risk types",
+      "icon": "Document",
+      "path": "/setup/risk-types"
+    },
+    {
+      "id": "access-levels",
+      "name": "Access levels",
+      "icon": "Settings",
+      "path": "/setup/access-levels"
+    },
+    {
+      "id": "interface",
+      "name": "Interface",
+      "icon": "Settings",
+      "path": "/setup/interface"
+    },
+    {
+      "id": "review-approval",
+      "name": "Review & approval",
+      "icon": "Document",
+      "path": "/setup/review-approval"
+    },
+    {
+      "id": "proof-settings",
+      "name": "Proof settings",
+      "icon": "Settings",
+      "path": "/setup/proof-settings"
+    },
+    {
+      "id": "documents",
+      "name": "Documents",
+      "icon": "Document",
+      "path": "/setup/documents"
+    },
+    {
+      "id": "system",
+      "name": "System",
+      "icon": "Settings",
+      "path": "/setup/system"
+    },
+    {
+      "id": "recycle-bin",
+      "name": "Recycle bin",
+      "icon": "Folder",
+      "path": "/setup/recycle-bin"
+    }
+  ]
+} 

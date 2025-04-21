@@ -1,13 +1,32 @@
-import React from 'react';
-import { Text, ActionButton } from '@adobe/react-spectrum';
+import React, { useRef } from 'react';
+import { Text, ActionButton, View } from '@adobe/react-spectrum';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useButton } from '@react-aria/button';
+import { useOverlayTriggerState } from '@react-stately/overlays';
 import Visibility from '@spectrum-icons/workflow/Visibility';
 import VisibilityOff from '@spectrum-icons/workflow/VisibilityOff';
+import ChevronRight from '@spectrum-icons/workflow/ChevronRight';
+import Settings from '@spectrum-icons/workflow/Settings';
+import QuickNavPage from '../pages/QuickNavPage';
+import Popover from './Popover';
 
-const NavigationItem = ({ item, isCustomizing, onVisibilityChange, isHiddenItem = false, isVisible = true }) => {
+const NavigationItem = ({ item, isCustomizing, onVisibilityChange, isHiddenItem = false, isVisible = true, showChevron = false }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const isSelected = location.pathname === item.path;
+  const triggerRef = useRef(null);
+  const state = useOverlayTriggerState({});
+
+  const { buttonProps } = useButton({
+    onPress: () => {
+      if (item.id === 'quick-nav') {
+        state.toggle();
+      } else {
+        navigate(item.path);
+      }
+    },
+    isDisabled: !isHiddenItem && !isVisible
+  }, triggerRef);
 
   const showVisibilityButton = isCustomizing && item.id !== 'home' && item.id !== 'quick-nav';
   const itemStyles = {
@@ -24,47 +43,67 @@ const NavigationItem = ({ item, isCustomizing, onVisibilityChange, isHiddenItem 
     }
   };
 
-  const handleClick = () => {
-    if (isHiddenItem || isVisible) {
-      navigate(item.path);
-    }
-  };
-
   const handleVisibilityToggle = () => {
     if (onVisibilityChange) {
       onVisibilityChange(item.id, !isVisible);
     }
   };
 
-  const Icon = item.icon;
+  const Icon = item.icon === 'Settings' ? Settings : item.icon;
   return (
-    <div style={itemStyles}>
-      <div 
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: 'var(--spectrum-global-dimension-size-100)',
-          flex: 1
-        }}
-        onClick={handleClick}
-        role="button"
-        tabIndex={0}
+    <View>
+      <div
+        {...buttonProps}
+        ref={triggerRef}
+        style={itemStyles}
       >
-        <Icon size="S" />
-        <Text>{item.name}</Text>
-      </div>
-      {showVisibilityButton && (
-        <ActionButton 
-          isQuiet 
-          onPress={handleVisibilityToggle}
-          UNSAFE_style={{
-            opacity: (!isVisible) ? '0.5' : '1'
+        <div 
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 'var(--spectrum-global-dimension-size-100)',
+            flex: 1
           }}
         >
-          {isVisible ? <Visibility size="S" /> : <VisibilityOff size="S" />}
-        </ActionButton>
+          <Icon size="S" />
+          <Text>{item.name}</Text>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spectrum-global-dimension-size-100)' }}>
+          {showChevron && (
+            <div 
+              role="button"
+              tabIndex={0}
+              style={{ cursor: isHiddenItem || isVisible ? 'pointer' : 'not-allowed' }}
+            >
+              <ChevronRight size="S" />
+            </div>
+          )}
+          {showVisibilityButton && (
+            <ActionButton 
+              isQuiet 
+              onPress={handleVisibilityToggle}
+              UNSAFE_style={{
+                opacity: (!isVisible) ? '0.5' : '1'
+              }}
+            >
+              {isVisible ? <Visibility size="S" /> : <VisibilityOff size="S" />}
+            </ActionButton>
+          )}
+        </div>
+      </div>
+      {state.isOpen && (
+        <Popover 
+          state={state}
+          triggerRef={triggerRef}
+          placement="right top"
+          offset={8}
+        >
+          <View padding="size-200">
+            <QuickNavPage />
+          </View>
+        </Popover>
       )}
-    </div>
+    </View>
   );
 };
 

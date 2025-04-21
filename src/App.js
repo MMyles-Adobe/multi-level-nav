@@ -27,7 +27,26 @@ import ReportsPage from './pages/ReportsPage';
 import AnalyticsPage from './pages/AnalyticsPage';
 import UsersPage from './pages/UsersPage';
 import ResourcingPage from './pages/ResourcingPage';
-import SetupPage from './pages/SetupPage';
+import ProjectPreferencesPage from './pages/ProjectPreferencesPage';
+import ProcessesPage from './pages/ProcessesPage';
+import CustomFormsPage from './pages/CustomFormsPage';
+import JobRolesPage from './pages/JobRolesPage';
+import GroupsPage from './pages/GroupsPage';
+import CompaniesPage from './pages/CompaniesPage';
+import LoginAsPage from './pages/LoginAsPage';
+import ResourceManagementPage from './pages/ResourceManagementPage';
+import SchedulesPage from './pages/SchedulesPage';
+import TimesheetsHoursPage from './pages/TimesheetsHoursPage';
+import EmailPage from './pages/EmailPage';
+import ScorecardsPage from './pages/ScorecardsPage';
+import ExpenseTypesPage from './pages/ExpenseTypesPage';
+import RiskTypesPage from './pages/RiskTypesPage';
+import AccessLevelsPage from './pages/AccessLevelsPage';
+import InterfacePage from './pages/InterfacePage';
+import ReviewApprovalPage from './pages/ReviewApprovalPage';
+import ProofSettingsPage from './pages/ProofSettingsPage';
+import SystemPage from './pages/SystemPage';
+import RecycleBinPage from './pages/RecycleBinPage';
 
 function App() {
   return (
@@ -68,7 +87,29 @@ function App() {
               <Route path="/analytics" element={<AnalyticsPage />} />
               <Route path="/users" element={<UsersPage />} />
               <Route path="/resourcing" element={<ResourcingPage />} />
-              <Route path="/setup" element={<SetupPage />} />
+              <Route path="/setup" element={<Navigate to="/setup/project-preferences" replace />} />
+              <Route path="/setup/project-preferences" element={<ProjectPreferencesPage />} />
+              <Route path="/setup/processes" element={<ProcessesPage />} />
+              <Route path="/setup/custom-forms" element={<CustomFormsPage />} />
+              <Route path="/setup/job-roles" element={<JobRolesPage />} />
+              <Route path="/setup/teams" element={<TeamsPage />} />
+              <Route path="/setup/groups" element={<GroupsPage />} />
+              <Route path="/setup/companies" element={<CompaniesPage />} />
+              <Route path="/setup/login-as" element={<LoginAsPage />} />
+              <Route path="/setup/resource-management" element={<ResourceManagementPage />} />
+              <Route path="/setup/schedules" element={<SchedulesPage />} />
+              <Route path="/setup/timesheets-hours" element={<TimesheetsHoursPage />} />
+              <Route path="/setup/email" element={<EmailPage />} />
+              <Route path="/setup/scorecards" element={<ScorecardsPage />} />
+              <Route path="/setup/expense-types" element={<ExpenseTypesPage />} />
+              <Route path="/setup/risk-types" element={<RiskTypesPage />} />
+              <Route path="/setup/access-levels" element={<AccessLevelsPage />} />
+              <Route path="/setup/interface" element={<InterfacePage />} />
+              <Route path="/setup/review-approval" element={<ReviewApprovalPage />} />
+              <Route path="/setup/proof-settings" element={<ProofSettingsPage />} />
+              <Route path="/setup/documents" element={<DocumentsPage />} />
+              <Route path="/setup/system" element={<SystemPage />} />
+              <Route path="/setup/recycle-bin" element={<RecycleBinPage />} />
             </Routes>
           </main>
         </div>

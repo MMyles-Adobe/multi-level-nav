@@ -1,13 +1,13 @@
 import React from 'react';
-import { View, Heading } from '@adobe/react-spectrum';
+import { View, Heading, Text } from '@adobe/react-spectrum';
 
-function TeamsPage() {
+const TeamsPage = () => {
   return (
     <View>
       <Heading level={1}>Teams</Heading>
-      <p>This is the Teams page content.</p>
+      <Text>Teams configuration page</Text>
     </View>
   );
-}
+};
 
 export default TeamsPage; 

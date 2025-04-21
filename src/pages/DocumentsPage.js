@@ -1,13 +1,13 @@
 import React from 'react';
-import { View, Heading } from '@adobe/react-spectrum';
+import { View, Heading, Text } from '@adobe/react-spectrum';
 
-function DocumentsPage() {
+const DocumentsPage = () => {
   return (
     <View>
       <Heading level={1}>Documents</Heading>
-      <p>This is the Documents page content.</p>
+      <Text>Documents configuration page</Text>
     </View>
   );
-}
+};
 
 export default DocumentsPage; 
