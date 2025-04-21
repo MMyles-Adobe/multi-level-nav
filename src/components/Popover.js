@@ -23,7 +23,11 @@ function Popover({ children, state, ...props }) {
           boxShadow: '0 4px 16px rgba(0, 0, 0, 0.15)',
           zIndex: 1000,
           position: 'absolute',
-          padding: '24px'
+          padding: '24px',
+          opacity: state.isOpen ? 1 : 0,
+          transform: state.isOpen ? 'translateY(0)' : 'translateY(-10px)',
+          transition: 'opacity 0.2s ease-in-out, transform 0.2s ease-in-out',
+          pointerEvents: state.isOpen ? 'auto' : 'none'
         }}
       >
         <DismissButton onDismiss={state.close} />

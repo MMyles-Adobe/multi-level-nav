@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { View, ActionButton, ButtonGroup, Button, Text } from '@adobe/react-spectrum';
 import { useNavigate, useLocation } from 'react-router-dom';
 import NavigationSection from './NavigationSection';
@@ -24,6 +24,7 @@ import UserGroup from '@spectrum-icons/workflow/UserGroup';
 import Settings from '@spectrum-icons/workflow/Settings';
 import Properties from '@spectrum-icons/workflow/Properties';
 import ChevronRight from '@spectrum-icons/workflow/ChevronRight';
+import ViewGrid from '@spectrum-icons/workflow/ViewGrid';
 import navMain from '../config/navMain.json';
 import navSetup from '../config/navSetup.json';
 
@@ -48,7 +49,8 @@ const iconMap = {
   UserGroup,
   Settings,
   Properties,
-  ChevronRight
+  ChevronRight,
+  ViewGrid
 };
 
 const SideNavigation = () => {
@@ -66,6 +68,56 @@ const SideNavigation = () => {
     }
     return location.pathname.split('/')[1] || 'home';
   });
+  const [expandedSections, setExpandedSections] = useState(() => {
+    const saved = localStorage.getItem('expandedSections');
+    return saved ? JSON.parse(saved) : {
+      'Planning & Strategy': true,
+      'Work Items': true,
+      'Monitoring': true,
+      'People & Resourcing': true,
+      'Tools': true
+    };
+  });
+
+  // Function to determine which section contains the current path
+  const getSectionForPath = (path) => {
+    if (path.startsWith('/setup')) return 'Tools';
+    if (path.startsWith('/workspaces') || path.startsWith('/prioritize') || 
+        path.startsWith('/boards') || path.startsWith('/calendars') || 
+        path.startsWith('/blueprints')) return 'Planning & Strategy';
+    if (path.startsWith('/portfolios') || path.startsWith('/programs') || 
+        path.startsWith('/campaigns') || path.startsWith('/projects') || 
+        path.startsWith('/documents') || path.startsWith('/requests')) return 'Work Items';
+    if (path.startsWith('/dashboards') || path.startsWith('/reports') || 
+        path.startsWith('/analytics')) return 'Monitoring';
+    if (path.startsWith('/users') || path.startsWith('/teams') || 
+        path.startsWith('/timesheets') || path.startsWith('/resourcing') || 
+        path.startsWith('/calendars')) return 'People & Resourcing';
+    return null;
+  };
+
+  // Effect to expand section when navigating to a new page
+  useEffect(() => {
+    const currentPath = location.pathname;
+    const section = getSectionForPath(currentPath);
+    if (section && !expandedSections[section]) {
+      const newExpandedSections = {
+        ...expandedSections,
+        [section]: true
+      };
+      setExpandedSections(newExpandedSections);
+      localStorage.setItem('expandedSections', JSON.stringify(newExpandedSections));
+    }
+  }, [location.pathname]);
+
+  const toggleSection = (sectionName) => {
+    const newExpandedSections = {
+      ...expandedSections,
+      [sectionName]: !expandedSections[sectionName]
+    };
+    setExpandedSections(newExpandedSections);
+    localStorage.setItem('expandedSections', JSON.stringify(newExpandedSections));
+  };
 
   // Handle navigation changes
   const handleSelectionChange = (key) => {
@@ -170,6 +222,17 @@ const SideNavigation = () => {
     }
   };
 
+  const navItems = [
+    { id: 'home', name: 'Home', icon: Home, path: '/', isVisible: true },
+    { id: 'projects', name: 'Projects', icon: Project, path: '/projects', isVisible: true },
+    { id: 'campaigns', name: 'Campaigns', icon: Campaign, path: '/campaigns', isVisible: true },
+    { id: 'reports', name: 'Reports', icon: Report, path: '/reports', isVisible: true },
+    { id: 'boards', name: 'Boards', icon: ViewGrid, path: '/boards', isVisible: true },
+    { id: 'workspaces', name: 'Workspaces', icon: FolderOpen, path: '/workspaces', isVisible: true },
+    { id: 'quick-nav', name: 'My quick navigation', icon: ViewGrid, path: '/quick-nav', isVisible: true },
+    { id: 'tools', name: 'Tools', icon: Settings, path: '/tools', isVisible: true }
+  ];
+
   return (
     <View
       UNSAFE_style={{
@@ -224,7 +287,12 @@ const SideNavigation = () => {
           </View>
         ) : (
           <>
-            <NavigationSection title="Planning & Strategy" UNSAFE_style={{ marginTop: 'var(--spectrum-global-dimension-size-200)' }}>
+            <NavigationSection 
+              title="Planning & Strategy" 
+              UNSAFE_style={{ marginTop: 'var(--spectrum-global-dimension-size-200)' }}
+              isExpanded={expandedSections['Planning & Strategy']}
+              onToggle={() => toggleSection('Planning & Strategy')}
+            >
               <View className="nav-section">
                 {planningItems.filter(item => !isItemHidden(item)).map(item => (
                   <NavigationItem 
@@ -238,7 +306,12 @@ const SideNavigation = () => {
               </View>
             </NavigationSection>
 
-            <NavigationSection title="Work Items" UNSAFE_style={{ marginTop: 'var(--spectrum-global-dimension-size-200)' }}>
+            <NavigationSection 
+              title="Work Items" 
+              UNSAFE_style={{ marginTop: 'var(--spectrum-global-dimension-size-200)' }}
+              isExpanded={expandedSections['Work Items']}
+              onToggle={() => toggleSection('Work Items')}
+            >
               <View className="nav-section">
                 {workItems.filter(item => !isItemHidden(item)).map(item => (
                   <NavigationItem 
@@ -252,7 +325,12 @@ const SideNavigation = () => {
               </View>
             </NavigationSection>
 
-            <NavigationSection title="Monitoring" UNSAFE_style={{ marginTop: 'var(--spectrum-global-dimension-size-200)' }}>
+            <NavigationSection 
+              title="Monitoring" 
+              UNSAFE_style={{ marginTop: 'var(--spectrum-global-dimension-size-200)' }}
+              isExpanded={expandedSections['Monitoring']}
+              onToggle={() => toggleSection('Monitoring')}
+            >
               <View className="nav-section">
                 {monitoringItems.filter(item => !isItemHidden(item)).map(item => (
                   <NavigationItem 
@@ -266,7 +344,12 @@ const SideNavigation = () => {
               </View>
             </NavigationSection>
 
-            <NavigationSection title="People & Resourcing" UNSAFE_style={{ marginTop: 'var(--spectrum-global-dimension-size-200)' }}>
+            <NavigationSection 
+              title="People & Resourcing" 
+              UNSAFE_style={{ marginTop: 'var(--spectrum-global-dimension-size-200)' }}
+              isExpanded={expandedSections['People & Resourcing']}
+              onToggle={() => toggleSection('People & Resourcing')}
+            >
               <View className="nav-section">
                 {peopleItems.filter(item => !isItemHidden(item)).map(item => (
                   <NavigationItem 
@@ -280,36 +363,25 @@ const SideNavigation = () => {
               </View>
             </NavigationSection>
 
-            <NavigationSection title="Tools" UNSAFE_style={{ marginTop: 'var(--spectrum-global-dimension-size-200)' }}>
-              <View className="nav-section">
-                {toolsItems.filter(item => !isItemHidden(item)).map(item => (
-                  <NavigationItem 
-                    key={item.id} 
-                    item={item} 
-                    isCustomizing={isCustomizing}
-                    onVisibilityChange={handleVisibilityChange}
-                    isVisible={pendingVisibility[item.id] ?? true}
-                  />
-                ))}
-              </View>
-            </NavigationSection>
-
-            <NavigationSection title="Setup" UNSAFE_style={{ marginTop: 'var(--spectrum-global-dimension-size-200)' }}>
-              <View className="nav-section">
-                <NavigationItem
-                  key="setup"
-                  item={{
-                    id: 'setup',
-                    name: 'Setup',
-                    icon: 'Settings',
-                    path: '/setup'
-                  }}
-                  isCustomizing={isCustomizing}
-                  onVisibilityChange={handleVisibilityChange}
-                  isVisible={pendingVisibility['setup'] ?? true}
-                  showChevron={true}
-                />
-              </View>
+            <NavigationSection 
+              title="Tools" 
+              UNSAFE_style={{ marginTop: 'var(--spectrum-global-dimension-size-200)' }}
+              isExpanded={expandedSections['Tools']}
+              onToggle={() => toggleSection('Tools')}
+            >
+              <NavigationItem
+                key="setup"
+                item={{
+                  id: 'setup',
+                  name: 'Setup',
+                  icon: Settings,
+                  path: '/setup'
+                }}
+                isCustomizing={isCustomizing}
+                onVisibilityChange={handleVisibilityChange}
+                isVisible={pendingVisibility['setup'] ?? true}
+                showChevron={true}
+              />
             </NavigationSection>
           </>
         )}

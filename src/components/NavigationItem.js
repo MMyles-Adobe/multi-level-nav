@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Text, ActionButton, View } from '@adobe/react-spectrum';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useButton } from '@react-aria/button';
@@ -16,6 +16,8 @@ const NavigationItem = ({ item, isCustomizing, onVisibilityChange, isHiddenItem 
   const isSelected = location.pathname === item.path;
   const triggerRef = useRef(null);
   const state = useOverlayTriggerState({});
+  const hoverTimer = useRef(null);
+  const closeTimer = useRef(null);
 
   const { buttonProps } = useButton({
     onPress: () => {
@@ -27,6 +29,53 @@ const NavigationItem = ({ item, isCustomizing, onVisibilityChange, isHiddenItem 
     },
     isDisabled: !isHiddenItem && !isVisible
   }, triggerRef);
+
+  const handleMouseEnter = () => {
+    if (item.id === 'quick-nav' && !state.isOpen) {
+      hoverTimer.current = setTimeout(() => {
+        state.open();
+      }, 500);
+    }
+    if (closeTimer.current) {
+      clearTimeout(closeTimer.current);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (hoverTimer.current) {
+      clearTimeout(hoverTimer.current);
+    }
+    if (state.isOpen) {
+      closeTimer.current = setTimeout(() => {
+        state.close();
+      }, 1500);
+    }
+  };
+
+  const handlePopoverMouseEnter = () => {
+    if (closeTimer.current) {
+      clearTimeout(closeTimer.current);
+    }
+  };
+
+  const handlePopoverMouseLeave = () => {
+    if (state.isOpen) {
+      closeTimer.current = setTimeout(() => {
+        state.close();
+      }, 1500);
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      if (hoverTimer.current) {
+        clearTimeout(hoverTimer.current);
+      }
+      if (closeTimer.current) {
+        clearTimeout(closeTimer.current);
+      }
+    };
+  }, []);
 
   const showVisibilityButton = isCustomizing && item.id !== 'home' && item.id !== 'quick-nav';
   const itemStyles = {
@@ -56,6 +105,8 @@ const NavigationItem = ({ item, isCustomizing, onVisibilityChange, isHiddenItem 
         {...buttonProps}
         ref={triggerRef}
         style={itemStyles}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
       >
         <div 
           style={{
@@ -105,9 +156,14 @@ const NavigationItem = ({ item, isCustomizing, onVisibilityChange, isHiddenItem 
           offset={8}
           crossOffset={-20}
         >
-          <View padding="size-200">
-            <QuickNavPage onClose={() => state.close()} />
-          </View>
+          <div
+            onMouseEnter={handlePopoverMouseEnter}
+            onMouseLeave={handlePopoverMouseLeave}
+          >
+            <View padding="size-200">
+              <QuickNavPage onClose={() => state.close()} />
+            </View>
+          </div>
         </Popover>
       )}
     </View>

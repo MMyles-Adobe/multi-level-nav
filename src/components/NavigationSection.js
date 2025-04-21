@@ -1,62 +1,44 @@
-import React, { useState } from 'react';
-import { View, Text, ActionButton } from '@adobe/react-spectrum';
+import React from 'react';
+import { Text, View } from '@adobe/react-spectrum';
 import ChevronRight from '@spectrum-icons/workflow/ChevronRight';
 
-const NavigationSection = ({ title, children }) => {
-  const [isExpanded, setIsExpanded] = useState(true);
-
+const NavigationSection = ({ title, children, UNSAFE_style, isExpanded = true, onToggle }) => {
   return (
-    <View
-      UNSAFE_style={{
-        display: 'flex',
-        flexDirection: 'column',
-        paddingTop: 'var(--spectrum-global-dimension-size-100)'
-      }}
-    >
-      <style>
-        {`
-          .spectrum-ActionButton-label {
-            text-align: left !important;
-          }
-          .custom-action-button {
-            padding: 8px 0px 8px 5px !important;
-          }
-        `}
-      </style>
-      <ActionButton
-        onPress={() => setIsExpanded(!isExpanded)}
-        UNSAFE_className="custom-action-button"
-        UNSAFE_style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '0',
-          backgroundColor: 'transparent',
-          border: 'none',
+    <div style={{ marginBottom: 'var(--spectrum-global-dimension-size-200)' }}>
+      <div 
+        style={{ 
+          display: 'flex', 
+          alignItems: 'center', 
           cursor: 'pointer',
-          width: '100%',
-          justifyContent: 'flex-start'
+          padding: '0 var(--spectrum-global-dimension-size-150)',
+          marginBottom: 'var(--spectrum-global-dimension-size-100)'
         }}
+        onClick={onToggle}
       >
-        <ChevronRight
-          UNSAFE_style={{
-            transform: isExpanded ? 'rotate(90deg)' : 'rotate(0deg)',
-            transition: 'transform 0.2s ease-in-out'
-          }}
-        />
-        <Text
-          UNSAFE_style={{
-            fontSize: '14px',
-            fontWeight: 'var(--spectrum-global-font-weight-bold)',
-            color: 'var(--spectrum-global-color-gray-700)',
-            letterSpacing: '0.06em',
-            textAlign: 'left'
-          }}
-        >
+        <Text UNSAFE_style={{ 
+          fontSize: 'var(--spectrum-global-dimension-font-size-75)',
+          fontWeight: 'var(--spectrum-global-font-weight-bold)',
+          color: 'var(--spectrum-global-color-gray-700)',
+          textTransform: 'uppercase',
+          letterSpacing: 'var(--spectrum-global-dimension-font-letter-spacing-100)',
+          flex: 1
+        }}>
           {title}
         </Text>
-      </ActionButton>
-      {isExpanded && children}
-    </View>
+        <ChevronRight 
+          size="S" 
+          UNSAFE_style={{ 
+            transform: isExpanded ? 'rotate(90deg)' : 'none',
+            transition: 'transform 0.2s ease-in-out'
+          }} 
+        />
+      </div>
+      {isExpanded && (
+        <View UNSAFE_style={UNSAFE_style}>
+          {children}
+        </View>
+      )}
+    </div>
   );
 };
 
