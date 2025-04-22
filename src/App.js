@@ -24,7 +24,6 @@ import RequestsPage from './pages/RequestsPage';
 import DashboardsPage from './pages/DashboardsPage';
 import ReportsPage from './pages/ReportsPage';
 import AnalyticsPage from './pages/AnalyticsPage';
-import AnalyticsDashboardPage from './pages/AnalyticsDashboardPage';
 import UsersPage from './pages/UsersPage';
 import ResourcingPage from './pages/ResourcingPage';
 import ProjectPreferencesPage from './pages/ProjectPreferencesPage';
@@ -47,6 +46,13 @@ import ReviewApprovalPage from './pages/ReviewApprovalPage';
 import ProofSettingsPage from './pages/ProofSettingsPage';
 import SystemPage from './pages/SystemPage';
 import RecycleBinPage from './pages/RecycleBinPage';
+import AnalyticsDashboardDetailsPage from './pages/AnalyticsDashboardDetailsPage';
+import AnalyticsDashboardTasksPage from './pages/AnalyticsDashboardTasksPage';
+import AnalyticsDashboardPlanningPage from './pages/AnalyticsDashboardPlanningPage';
+import AnalyticsDashboardDocumentsPage from './pages/AnalyticsDashboardDocumentsPage';
+import AnalyticsDashboardIssuesPage from './pages/AnalyticsDashboardIssuesPage';
+import AnalyticsDashboardUpdatesPage from './pages/AnalyticsDashboardUpdatesPage';
+import AnalyticsDashboardMetricsPage from './pages/AnalyticsDashboardMetricsPage';
 
 function App() {
   return (
@@ -64,7 +70,14 @@ function App() {
             <Routes>
               <Route path="/" element={<Navigate to="/home" replace />} />
               <Route path="/home" element={<HomePage />} />
-              <Route path="/analytics-dashboard" element={<AnalyticsDashboardPage />} />
+              <Route path="/analytics-dashboard" element={<Navigate to="/analytics-dashboard/details" replace />} />
+              <Route path="/analytics-dashboard/details" element={<AnalyticsDashboardDetailsPage />} />
+              <Route path="/analytics-dashboard/tasks" element={<AnalyticsDashboardTasksPage />} />
+              <Route path="/analytics-dashboard/planning" element={<AnalyticsDashboardPlanningPage />} />
+              <Route path="/analytics-dashboard/documents" element={<AnalyticsDashboardDocumentsPage />} />
+              <Route path="/analytics-dashboard/issues" element={<AnalyticsDashboardIssuesPage />} />
+              <Route path="/analytics-dashboard/updates" element={<AnalyticsDashboardUpdatesPage />} />
+              <Route path="/analytics-dashboard/metrics" element={<AnalyticsDashboardMetricsPage />} />
               <Route path="/quick-nav" element={<QuickNavPage />} />
               <Route path="/products" element={<ProductsPage />} />
               <Route path="/services" element={<ServicesPage />} />

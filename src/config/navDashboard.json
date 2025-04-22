@@ -1,0 +1,46 @@
+{
+  "dashboardItems": [
+    {
+      "id": "project-details",
+      "name": "Project details",
+      "icon": "Properties",
+      "path": "/analytics-dashboard/details"
+    },
+    {
+      "id": "tasks",
+      "name": "Tasks",
+      "icon": "TaskList",
+      "path": "/analytics-dashboard/tasks"
+    },
+    {
+      "id": "planning",
+      "name": "Planning",
+      "icon": "Calendar",
+      "path": "/analytics-dashboard/planning"
+    },
+    {
+      "id": "documents",
+      "name": "Documents",
+      "icon": "Document",
+      "path": "/analytics-dashboard/documents"
+    },
+    {
+      "id": "issues",
+      "name": "Issues",
+      "icon": "Alert",
+      "path": "/analytics-dashboard/issues"
+    },
+    {
+      "id": "updates",
+      "name": "Updates",
+      "icon": "Comment",
+      "path": "/analytics-dashboard/updates"
+    },
+    {
+      "id": "metrics",
+      "name": "Metrics",
+      "icon": "GraphTrend",
+      "path": "/analytics-dashboard/metrics"
+    }
+  ]
+} 

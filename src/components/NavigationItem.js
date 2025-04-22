@@ -118,7 +118,7 @@ const NavigationItem = ({ item, isCustomizing, onVisibilityChange, isHiddenItem 
             flex: 1
           }}
         >
-          <Icon size="S" />
+          <Icon size="S" UNSAFE_style={{ color: 'var(--spectrum-global-color-gray-600)' }} />
           <Text UNSAFE_style={{ 
             fontSize: 'var(--spectrum-global-dimension-font-size-75)',
             fontFamily: 'adobe-clean, sans-serif'
@@ -137,7 +137,7 @@ const NavigationItem = ({ item, isCustomizing, onVisibilityChange, isHiddenItem 
                 height: '100%'
               }}
             >
-              {chevronType === "double" ? <ChevronDoubleRight size={chevronSize} /> : <ChevronRight size={chevronSize} />}
+              {chevronType === "double" ? <ChevronDoubleRight size={chevronSize} UNSAFE_style={{ color: 'var(--spectrum-global-color-gray-600)' }} /> : <ChevronRight size={chevronSize} UNSAFE_style={{ color: 'var(--spectrum-global-color-gray-600)' }} />}
             </div>
           )}
           {showVisibilityButton && (

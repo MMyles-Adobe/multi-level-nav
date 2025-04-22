@@ -1,5 +1,5 @@
-import React, { useMemo, useState, useEffect } from 'react';
-import { View, ActionButton, ButtonGroup, Button } from '@adobe/react-spectrum';
+import React, { useMemo, useState, useEffect, useRef } from 'react';
+import { View, ActionButton, ButtonGroup, Button, Text } from '@adobe/react-spectrum';
 import { useNavigate, useLocation } from 'react-router-dom';
 import NavigationSection from './NavigationSection';
 import NavigationItem from './NavigationItem';
@@ -25,8 +25,11 @@ import Settings from '@spectrum-icons/workflow/Settings';
 import Properties from '@spectrum-icons/workflow/Properties';
 import ChevronRight from '@spectrum-icons/workflow/ChevronRight';
 import ViewGrid from '@spectrum-icons/workflow/ViewGrid';
+import Alert from '@spectrum-icons/workflow/Alert';
+import Comment from '@spectrum-icons/workflow/Comment';
 import navMain from '../config/navMain.json';
 import navSetup from '../config/navSetup.json';
+import navDashboard from '../config/navDashboard.json';
 
 const iconMap = {
   Home,
@@ -50,7 +53,9 @@ const iconMap = {
   Settings,
   Properties,
   ChevronRight,
-  ViewGrid
+  ViewGrid,
+  Alert,
+  Comment
 };
 
 const SideNavigation = () => {
@@ -62,6 +67,10 @@ const SideNavigation = () => {
   const [hiddenMainItems, setHiddenMainItems] = useState([]);
   const [hiddenSetupItems, setHiddenSetupItems] = useState([]);
   const [isSetupMode, setIsSetupMode] = useState(location.pathname.startsWith('/setup'));
+  const [isDashboardMode, setIsDashboardMode] = useState(location.pathname.startsWith('/analytics-dashboard'));
+  const mainNavRef = useRef(null);
+  const setupNavRef = useRef(null);
+  const dashboardNavRef = useRef(null);
   const [expandedSections, setExpandedSections] = useState(() => {
     const saved = localStorage.getItem('expandedSections');
     return saved ? JSON.parse(saved) : {
@@ -73,6 +82,63 @@ const SideNavigation = () => {
       'Hidden items': false
     };
   });
+
+  // Get the current navigation config based on mode
+  const currentConfig = useMemo(() => 
+    isDashboardMode ? {
+      ...navMain,
+      dashboardItems: navDashboard.dashboardItems || []
+    } : isSetupMode ? navSetup : navMain,
+    [isSetupMode, isDashboardMode]
+  );
+
+  const mapItemsWithIcons = (items) => {
+    return items.map(item => ({
+      ...item,
+      icon: iconMap[item.icon]
+    }));
+  };
+
+  const mainItems = useMemo(() => 
+    mapItemsWithIcons(currentConfig.mainItems || []), 
+    [currentConfig]
+  );
+
+  const setupItems = useMemo(() => 
+    isDashboardMode ? [] : (isSetupMode ? mapItemsWithIcons(currentConfig.setupItems || []) : []), 
+    [currentConfig, isSetupMode, isDashboardMode]
+  );
+  const planningItems = useMemo(() => 
+    isDashboardMode ? [] : (!isSetupMode ? mapItemsWithIcons(currentConfig.planningItems || []) : []), 
+    [currentConfig, isSetupMode, isDashboardMode]
+  );
+  const workItems = useMemo(() => 
+    isDashboardMode ? [] : (!isSetupMode ? mapItemsWithIcons(currentConfig.workItems || []) : []), 
+    [currentConfig, isSetupMode, isDashboardMode]
+  );
+  const monitoringItems = useMemo(() => 
+    isDashboardMode ? [] : (!isSetupMode ? mapItemsWithIcons(currentConfig.monitoringItems || []) : []), 
+    [currentConfig, isSetupMode, isDashboardMode]
+  );
+  const peopleItems = useMemo(() => 
+    isDashboardMode ? [] : (!isSetupMode ? mapItemsWithIcons(currentConfig.peopleItems || []) : []), 
+    [currentConfig, isSetupMode, isDashboardMode]
+  );
+
+  const dashboardItems = useMemo(() => 
+    isDashboardMode ? mapItemsWithIcons(currentConfig.dashboardItems || []) : [], 
+    [currentConfig, isDashboardMode]
+  );
+
+  // Scroll to top when navigation mode changes
+  useEffect(() => {
+    const currentRef = isDashboardMode ? dashboardNavRef : (isSetupMode ? setupNavRef : mainNavRef);
+    if (currentRef.current) {
+      requestAnimationFrame(() => {
+        currentRef.current.scrollTop = 0;
+      });
+    }
+  }, [isSetupMode, isDashboardMode]);
 
   // Function to determine which section contains the current path
   const getSectionForPath = (path) => {
@@ -118,7 +184,9 @@ const SideNavigation = () => {
   React.useEffect(() => {
     const path = location.pathname;
     const isSetup = path.startsWith('/setup');
+    const isDashboard = path.startsWith('/analytics-dashboard');
     setIsSetupMode(isSetup);
+    setIsDashboardMode(isDashboard);
   }, [location.pathname]);
 
   const handleSetupNavigation = () => {
@@ -129,9 +197,6 @@ const SideNavigation = () => {
       navigate(firstSetupItem.path);
     }
   };
-
-  // Get the current navigation config based on mode
-  const currentConfig = isSetupMode ? navSetup : navMain;
 
   const handleVisibilityChange = (itemId, isVisible) => {
     setPendingVisibility(prev => ({
@@ -167,20 +232,6 @@ const SideNavigation = () => {
     setPendingVisibility(itemVisibility);
     setIsCustomizing(false);
   };
-
-  const mapItemsWithIcons = (items) => {
-    return items.map(item => ({
-      ...item,
-      icon: iconMap[item.icon]
-    }));
-  };
-
-  const mainItems = useMemo(() => mapItemsWithIcons(currentConfig.mainItems), [currentConfig]);
-  const setupItems = useMemo(() => isSetupMode ? mapItemsWithIcons(currentConfig.setupItems) : [], [currentConfig, isSetupMode]);
-  const planningItems = useMemo(() => !isSetupMode ? mapItemsWithIcons(currentConfig.planningItems) : [], [currentConfig, isSetupMode]);
-  const workItems = useMemo(() => !isSetupMode ? mapItemsWithIcons(currentConfig.workItems) : [], [currentConfig, isSetupMode]);
-  const monitoringItems = useMemo(() => !isSetupMode ? mapItemsWithIcons(currentConfig.monitoringItems) : [], [currentConfig, isSetupMode]);
-  const peopleItems = useMemo(() => !isSetupMode ? mapItemsWithIcons(currentConfig.peopleItems) : [], [currentConfig, isSetupMode]);
 
   const isItemHidden = (item) => {
     if (isSetupMode) {
@@ -223,21 +274,51 @@ const SideNavigation = () => {
             />
           ))}
         </View>
+        {(isSetupMode || isDashboardMode) && (
+          <View
+            UNSAFE_style={{
+              paddingTop: 'var(--spectrum-global-dimension-size-200)',
+              paddingLeft: '12px'
+            }}
+          >
+            <Text
+              UNSAFE_style={{
+                fontSize: 'var(--spectrum-global-dimension-font-size-200)',
+                fontWeight: 'var(--spectrum-global-font-weight-bold)',
+                color: 'var(--spectrum-global-color-gray-700)'
+              }}
+            >
+              {isSetupMode ? 'Setup' : 'Project'}
+            </Text>
+            {isDashboardMode && (
+              <Text
+                UNSAFE_style={{
+                  marginTop: 'var(--spectrum-global-dimension-size-100)',
+                  fontSize: 'var(--spectrum-global-dimension-font-size-100)',
+                  color: 'var(--spectrum-global-color-gray-600)',
+                  display: 'block'
+                }}
+              >
+                Analytics Dashboard Redesign
+              </Text>
+            )}
+          </View>
+        )}
       </View>
       <View
+        key={`nav-${isSetupMode ? 'setup' : (isDashboardMode ? 'dashboard' : 'main')}`}
         UNSAFE_style={{
           flex: 1,
           overflow: 'auto',
-          padding: 'var(--spectrum-global-dimension-size-200)',
-          gap: 'var(--spectrum-global-dimension-size-200)'
+          padding: 'var(--spectrum-global-dimension-size-200)'
         }}
       >
-        {isSetupMode ? (
+        {isDashboardMode ? (
           <View className="nav-section">
-            {setupItems.filter(item => !isItemHidden(item)).map(item => (
-              <NavigationItem 
-                key={item.id} 
-                item={item} 
+            {dashboardItems.map(item => (
+              <NavigationItem
+                key={item.id}
+                item={item}
                 isCustomizing={isCustomizing}
                 onVisibilityChange={handleVisibilityChange}
                 isVisible={pendingVisibility[item.id] ?? true}
@@ -245,129 +326,151 @@ const SideNavigation = () => {
             ))}
           </View>
         ) : (
-          <>
-            <NavigationSection 
-              title="Planning & Strategy" 
-              UNSAFE_style={{ marginTop: 'var(--spectrum-global-dimension-size-100)' }}
-              isExpanded={expandedSections['Planning & Strategy']}
-              onToggle={() => toggleSection('Planning & Strategy')}
-            >
-              <View className="nav-section">
-                {planningItems.filter(item => !isItemHidden(item)).map(item => (
-                  <NavigationItem 
-                    key={item.id} 
-                    item={item} 
-                    isCustomizing={isCustomizing}
-                    onVisibilityChange={handleVisibilityChange}
-                    isVisible={pendingVisibility[item.id] ?? true}
-                  />
-                ))}
-              </View>
-            </NavigationSection>
-
-            <NavigationSection 
-              title="Work Items" 
-              UNSAFE_style={{ marginTop: 'var(--spectrum-global-dimension-size-100)' }}
-              isExpanded={expandedSections['Work Items']}
-              onToggle={() => toggleSection('Work Items')}
-            >
-              <View className="nav-section">
-                {workItems.filter(item => !isItemHidden(item)).map(item => (
-                  <NavigationItem 
-                    key={item.id} 
-                    item={item} 
-                    isCustomizing={isCustomizing}
-                    onVisibilityChange={handleVisibilityChange}
-                    isVisible={pendingVisibility[item.id] ?? true}
-                  />
-                ))}
-              </View>
-            </NavigationSection>
-
-            <NavigationSection 
-              title="Monitoring" 
-              UNSAFE_style={{ marginTop: 'var(--spectrum-global-dimension-size-100)' }}
-              isExpanded={expandedSections['Monitoring']}
-              onToggle={() => toggleSection('Monitoring')}
-            >
-              <View className="nav-section">
-                {monitoringItems.filter(item => !isItemHidden(item)).map(item => (
-                  <NavigationItem 
-                    key={item.id} 
-                    item={item} 
-                    isCustomizing={isCustomizing}
-                    onVisibilityChange={handleVisibilityChange}
-                    isVisible={pendingVisibility[item.id] ?? true}
-                  />
-                ))}
-              </View>
-            </NavigationSection>
-
-            <NavigationSection 
-              title="People & Resourcing" 
-              UNSAFE_style={{ marginTop: 'var(--spectrum-global-dimension-size-100)' }}
-              isExpanded={expandedSections['People & Resourcing']}
-              onToggle={() => toggleSection('People & Resourcing')}
-            >
-              <View className="nav-section">
-                {peopleItems.filter(item => !isItemHidden(item)).map(item => (
-                  <NavigationItem 
-                    key={item.id} 
-                    item={item} 
-                    isCustomizing={isCustomizing}
-                    onVisibilityChange={handleVisibilityChange}
-                    isVisible={pendingVisibility[item.id] ?? true}
-                  />
-                ))}
-              </View>
-            </NavigationSection>
-
-            <NavigationSection 
-              title="Tools" 
-              UNSAFE_style={{ marginTop: 'var(--spectrum-global-dimension-size-100)' }}
-              isExpanded={expandedSections['Tools']}
-              onToggle={() => toggleSection('Tools')}
-            >
-              <NavigationItem
-                key="setup"
-                item={{
-                  id: 'setup',
-                  name: 'Setup',
-                  icon: Settings,
-                  path: '/setup'
-                }}
-                isCustomizing={isCustomizing}
-                onVisibilityChange={handleVisibilityChange}
-                isVisible={pendingVisibility['setup'] ?? true}
-                showChevron={true}
-                chevronSize="S"
-                chevronType="single"
-                onPress={handleSetupNavigation}
-              />
-            </NavigationSection>
-          </>
-        )}
-
-        {(isSetupMode ? hiddenSetupItems : hiddenMainItems).length > 0 && (
-          <NavigationSection 
-            title="Hidden items" 
-            UNSAFE_style={{ marginTop: 'var(--spectrum-global-dimension-size-200)' }}
-            isExpanded={expandedSections['Hidden items']}
-            onToggle={() => toggleSection('Hidden items')}
+          <View
+            UNSAFE_style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 'var(--spectrum-global-dimension-size-200)'
+            }}
           >
-            <View className="nav-section">
-              {(isSetupMode ? hiddenSetupItems : hiddenMainItems).map(item => (
-                <NavigationItem
-                  key={item.id}
-                  item={item}
-                  isCustomizing={isCustomizing}
-                  onVisibilityChange={handleVisibilityChange}
-                  isHiddenItem={true}
-                  isVisible={pendingVisibility[item.id] ?? true}
-                />
-              ))}
-            </View>
-          </NavigationSection>
+            {isSetupMode ? (
+              <View className="nav-section">
+                {setupItems.filter(item => !isItemHidden(item)).map(item => (
+                  <NavigationItem 
+                    key={item.id} 
+                    item={item} 
+                    isCustomizing={isCustomizing}
+                    onVisibilityChange={handleVisibilityChange}
+                    isVisible={pendingVisibility[item.id] ?? true}
+                  />
+                ))}
+              </View>
+            ) : (
+              <>
+                <NavigationSection 
+                  title="Planning & Strategy" 
+                  UNSAFE_style={{ marginTop: 'var(--spectrum-global-dimension-size-100)' }}
+                  isExpanded={expandedSections['Planning & Strategy']}
+                  onToggle={() => toggleSection('Planning & Strategy')}
+                >
+                  <View className="nav-section">
+                    {planningItems.filter(item => !isItemHidden(item)).map(item => (
+                      <NavigationItem 
+                        key={item.id} 
+                        item={item} 
+                        isCustomizing={isCustomizing}
+                        onVisibilityChange={handleVisibilityChange}
+                        isVisible={pendingVisibility[item.id] ?? true}
+                      />
+                    ))}
+                  </View>
+                </NavigationSection>
+
+                <NavigationSection 
+                  title="Work Items" 
+                  UNSAFE_style={{ marginTop: 'var(--spectrum-global-dimension-size-100)' }}
+                  isExpanded={expandedSections['Work Items']}
+                  onToggle={() => toggleSection('Work Items')}
+                >
+                  <View className="nav-section">
+                    {workItems.filter(item => !isItemHidden(item)).map(item => (
+                      <NavigationItem 
+                        key={item.id} 
+                        item={item} 
+                        isCustomizing={isCustomizing}
+                        onVisibilityChange={handleVisibilityChange}
+                        isVisible={pendingVisibility[item.id] ?? true}
+                      />
+                    ))}
+                  </View>
+                </NavigationSection>
+
+                <NavigationSection 
+                  title="Monitoring" 
+                  UNSAFE_style={{ marginTop: 'var(--spectrum-global-dimension-size-100)' }}
+                  isExpanded={expandedSections['Monitoring']}
+                  onToggle={() => toggleSection('Monitoring')}
+                >
+                  <View className="nav-section">
+                    {monitoringItems.filter(item => !isItemHidden(item)).map(item => (
+                      <NavigationItem 
+                        key={item.id} 
+                        item={item} 
+                        isCustomizing={isCustomizing}
+                        onVisibilityChange={handleVisibilityChange}
+                        isVisible={pendingVisibility[item.id] ?? true}
+                      />
+                    ))}
+                  </View>
+                </NavigationSection>
+
+                <NavigationSection 
+                  title="People & Resourcing" 
+                  UNSAFE_style={{ marginTop: 'var(--spectrum-global-dimension-size-100)' }}
+                  isExpanded={expandedSections['People & Resourcing']}
+                  onToggle={() => toggleSection('People & Resourcing')}
+                >
+                  <View className="nav-section">
+                    {peopleItems.filter(item => !isItemHidden(item)).map(item => (
+                      <NavigationItem 
+                        key={item.id} 
+                        item={item} 
+                        isCustomizing={isCustomizing}
+                        onVisibilityChange={handleVisibilityChange}
+                        isVisible={pendingVisibility[item.id] ?? true}
+                      />
+                    ))}
+                  </View>
+                </NavigationSection>
+
+                <NavigationSection 
+                  title="Tools" 
+                  UNSAFE_style={{ marginTop: 'var(--spectrum-global-dimension-size-100)' }}
+                  isExpanded={expandedSections['Tools']}
+                  onToggle={() => toggleSection('Tools')}
+                >
+                  <NavigationItem
+                    key="setup"
+                    item={{
+                      id: 'setup',
+                      name: 'Setup',
+                      icon: Settings,
+                      path: '/setup'
+                    }}
+                    isCustomizing={isCustomizing}
+                    onVisibilityChange={handleVisibilityChange}
+                    isVisible={pendingVisibility['setup'] ?? true}
+                    showChevron={true}
+                    chevronSize="S"
+                    chevronType="single"
+                    onPress={handleSetupNavigation}
+                  />
+                </NavigationSection>
+              </>
+            )}
+
+            {(isSetupMode ? hiddenSetupItems : hiddenMainItems).length > 0 && (
+              <NavigationSection 
+                title="Hidden items" 
+                UNSAFE_style={{ marginTop: 'var(--spectrum-global-dimension-size-200)' }}
+                isExpanded={expandedSections['Hidden items']}
+                onToggle={() => toggleSection('Hidden items')}
+              >
+                <View className="nav-section">
+                  {(isSetupMode ? hiddenSetupItems : hiddenMainItems).map(item => (
+                    <NavigationItem
+                      key={item.id}
+                      item={item}
+                      isCustomizing={isCustomizing}
+                      onVisibilityChange={handleVisibilityChange}
+                      isHiddenItem={true}
+                      isVisible={pendingVisibility[item.id] ?? true}
+                    />
+                  ))}
+                </View>
+              </NavigationSection>
+            )}
+          </View>
         )}
       </View>
       <View
