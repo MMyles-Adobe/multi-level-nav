@@ -6,11 +6,12 @@ import { useOverlayTriggerState } from '@react-stately/overlays';
 import Visibility from '@spectrum-icons/workflow/Visibility';
 import VisibilityOff from '@spectrum-icons/workflow/VisibilityOff';
 import ChevronRight from '@spectrum-icons/workflow/ChevronRight';
+import ChevronDoubleRight from '@spectrum-icons/workflow/ChevronDoubleRight';
 import Settings from '@spectrum-icons/workflow/Settings';
 import QuickNavPage from '../pages/QuickNavPage';
 import Popover from './Popover';
 
-const NavigationItem = ({ item, isCustomizing, onVisibilityChange, isHiddenItem = false, isVisible = true, showChevron = false }) => {
+const NavigationItem = ({ item, isCustomizing, onVisibilityChange, isHiddenItem = false, isVisible = true, showChevron = false, chevronSize = "S", chevronType = "single" }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const isSelected = location.pathname === item.path;
@@ -82,11 +83,12 @@ const NavigationItem = ({ item, isCustomizing, onVisibilityChange, isHiddenItem 
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: showVisibilityButton ? '1px var(--spectrum-global-dimension-size-150) 0' : '6px var(--spectrum-global-dimension-size-150)',
+    padding: '6px var(--spectrum-global-dimension-size-150)',
     cursor: isHiddenItem || isVisible ? 'pointer' : 'not-allowed',
     borderRadius: 0,
     backgroundColor: isSelected ? 'var(--spectrum-alias-highlight-selected)' : 'transparent',
     opacity: (!isVisible) ? '0.5' : '1',
+    minHeight: '32px',
     ':hover': {
       backgroundColor: (isHiddenItem || isVisible) ? 'var(--spectrum-alias-highlight-hover)' : 'transparent'
     }
@@ -117,7 +119,10 @@ const NavigationItem = ({ item, isCustomizing, onVisibilityChange, isHiddenItem 
           }}
         >
           <Icon size="S" />
-          <Text>{item.name}</Text>
+          <Text UNSAFE_style={{ 
+            fontSize: 'var(--spectrum-global-dimension-font-size-75)',
+            fontFamily: 'adobe-clean, sans-serif'
+          }}>{item.name}</Text>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spectrum-global-dimension-size-100)' }}>
           {showChevron && (
@@ -132,7 +137,7 @@ const NavigationItem = ({ item, isCustomizing, onVisibilityChange, isHiddenItem 
                 height: '100%'
               }}
             >
-              <ChevronRight size="S" />
+              {chevronType === "double" ? <ChevronDoubleRight size={chevronSize} /> : <ChevronRight size={chevronSize} />}
             </div>
           )}
           {showVisibilityButton && (

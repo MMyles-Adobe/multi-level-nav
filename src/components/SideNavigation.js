@@ -261,6 +261,8 @@ const SideNavigation = () => {
               onVisibilityChange={handleVisibilityChange}
               isVisible={pendingVisibility[item.id] ?? true}
               showChevron={item.id === 'quick-nav'}
+              chevronSize="S"
+              chevronType="single"
             />
           ))}
         </View>
@@ -289,7 +291,7 @@ const SideNavigation = () => {
           <>
             <NavigationSection 
               title="Planning & Strategy" 
-              UNSAFE_style={{ marginTop: 'var(--spectrum-global-dimension-size-200)' }}
+              UNSAFE_style={{ marginTop: 'var(--spectrum-global-dimension-size-100)' }}
               isExpanded={expandedSections['Planning & Strategy']}
               onToggle={() => toggleSection('Planning & Strategy')}
             >
@@ -308,7 +310,7 @@ const SideNavigation = () => {
 
             <NavigationSection 
               title="Work Items" 
-              UNSAFE_style={{ marginTop: 'var(--spectrum-global-dimension-size-200)' }}
+              UNSAFE_style={{ marginTop: 'var(--spectrum-global-dimension-size-100)' }}
               isExpanded={expandedSections['Work Items']}
               onToggle={() => toggleSection('Work Items')}
             >
@@ -327,7 +329,7 @@ const SideNavigation = () => {
 
             <NavigationSection 
               title="Monitoring" 
-              UNSAFE_style={{ marginTop: 'var(--spectrum-global-dimension-size-200)' }}
+              UNSAFE_style={{ marginTop: 'var(--spectrum-global-dimension-size-100)' }}
               isExpanded={expandedSections['Monitoring']}
               onToggle={() => toggleSection('Monitoring')}
             >
@@ -346,7 +348,7 @@ const SideNavigation = () => {
 
             <NavigationSection 
               title="People & Resourcing" 
-              UNSAFE_style={{ marginTop: 'var(--spectrum-global-dimension-size-200)' }}
+              UNSAFE_style={{ marginTop: 'var(--spectrum-global-dimension-size-100)' }}
               isExpanded={expandedSections['People & Resourcing']}
               onToggle={() => toggleSection('People & Resourcing')}
             >
@@ -365,7 +367,7 @@ const SideNavigation = () => {
 
             <NavigationSection 
               title="Tools" 
-              UNSAFE_style={{ marginTop: 'var(--spectrum-global-dimension-size-200)' }}
+              UNSAFE_style={{ marginTop: 'var(--spectrum-global-dimension-size-100)' }}
               isExpanded={expandedSections['Tools']}
               onToggle={() => toggleSection('Tools')}
             >
@@ -381,6 +383,8 @@ const SideNavigation = () => {
                 onVisibilityChange={handleVisibilityChange}
                 isVisible={pendingVisibility['setup'] ?? true}
                 showChevron={true}
+                chevronSize="S"
+                chevronType="single"
               />
             </NavigationSection>
           </>
