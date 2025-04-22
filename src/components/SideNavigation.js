@@ -66,6 +66,7 @@ const SideNavigation = () => {
   const [pendingVisibility, setPendingVisibility] = useState({});
   const [hiddenMainItems, setHiddenMainItems] = useState([]);
   const [hiddenSetupItems, setHiddenSetupItems] = useState([]);
+  const [hiddenDashboardItems, setHiddenDashboardItems] = useState([]);
   const [isSetupMode, setIsSetupMode] = useState(location.pathname.startsWith('/setup'));
   const [isDashboardMode, setIsDashboardMode] = useState(location.pathname.startsWith('/analytics-dashboard'));
   const mainNavRef = useRef(null);
@@ -213,6 +214,10 @@ const SideNavigation = () => {
       const newHiddenSetupItems = currentConfig.setupItems
         .filter(item => pendingVisibility[item.id] === false);
       setHiddenSetupItems(newHiddenSetupItems);
+    } else if (isDashboardMode) {
+      const newHiddenDashboardItems = currentConfig.dashboardItems
+        .filter(item => pendingVisibility[item.id] === false);
+      setHiddenDashboardItems(newHiddenDashboardItems);
     } else {
       const newHiddenMainItems = [
         ...currentConfig.mainItems,
@@ -236,6 +241,8 @@ const SideNavigation = () => {
   const isItemHidden = (item) => {
     if (isSetupMode) {
       return hiddenSetupItems.some(hiddenItem => hiddenItem.id === item.id);
+    } else if (isDashboardMode) {
+      return hiddenDashboardItems.some(hiddenItem => hiddenItem.id === item.id);
     } else {
       return hiddenMainItems.some(hiddenItem => hiddenItem.id === item.id);
     }
@@ -315,7 +322,7 @@ const SideNavigation = () => {
       >
         {isDashboardMode ? (
           <View className="nav-section">
-            {dashboardItems.map(item => (
+            {dashboardItems.filter(item => !isItemHidden(item)).map(item => (
               <NavigationItem
                 key={item.id}
                 item={item}
@@ -324,6 +331,28 @@ const SideNavigation = () => {
                 isVisible={pendingVisibility[item.id] ?? true}
               />
             ))}
+
+            {hiddenDashboardItems.length > 0 && (
+              <NavigationSection 
+                title="Hidden items" 
+                UNSAFE_style={{ marginTop: 'var(--spectrum-global-dimension-size-200)' }}
+                isExpanded={expandedSections['Hidden items']}
+                onToggle={() => toggleSection('Hidden items')}
+              >
+                <View className="nav-section">
+                  {hiddenDashboardItems.map(item => (
+                    <NavigationItem
+                      key={item.id}
+                      item={item}
+                      isCustomizing={isCustomizing}
+                      onVisibilityChange={handleVisibilityChange}
+                      isHiddenItem={true}
+                      isVisible={pendingVisibility[item.id] ?? false}
+                    />
+                  ))}
+                </View>
+              </NavigationSection>
+            )}
           </View>
         ) : (
           <View
