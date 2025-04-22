@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Heading, TableView, TableHeader, TableBody, Column, Row, Cell, Button, Flex, Link, StatusLight, Avatar, useCollator, useAsyncList } from '@adobe/react-spectrum';
+import { useNavigate } from 'react-router-dom';
 
 const uniqueOwners = [
   'Sarah Johnson',
@@ -36,6 +37,7 @@ function formatDate(dateString) {
 function ProjectsPage() {
   const collator = useCollator({ numeric: true });
   const [selectedKeys, setSelectedKeys] = useState(new Set());
+  const navigate = useNavigate();
   const [projects] = useState([
     { id: 1, name: 'Website Redesign', status: 'In Progress', owner: uniqueOwners[0], startDate: '2024-04-01', endDate: '2024-06-30' },
     { id: 2, name: 'Mobile App Development', status: 'Planning', owner: uniqueOwners[1], startDate: '2024-05-15', endDate: '2024-08-15' },
@@ -91,7 +93,9 @@ function ProjectsPage() {
 
   const list = useAsyncList({
     async load() {
-      return { items: projects };
+      return {
+        items: projects.sort((a, b) => collator.compare(a.name, b.name))
+      };
     },
     async sort({ items, sortDescriptor }) {
       return {
@@ -118,6 +122,10 @@ function ProjectsPage() {
           return sortDescriptor.direction === 'ascending' ? comparison : -comparison;
         })
       };
+    },
+    initialSortDescriptor: {
+      column: 'name',
+      direction: 'ascending'
     }
   });
 
@@ -156,7 +164,11 @@ function ProjectsPage() {
                 <Cell>
                   <Link
                     onPress={() => {
-                      alert(`${item.name} has been clicked`);
+                      if (item.name === 'Analytics Dashboard Redesign') {
+                        navigate('/analytics-dashboard');
+                      } else {
+                        alert(`${item.name} has been clicked`);
+                      }
                     }}
                   >
                     {item.name}

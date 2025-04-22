@@ -1,5 +1,5 @@
 import React, { useMemo, useState, useEffect } from 'react';
-import { View, ActionButton, ButtonGroup, Button, Text } from '@adobe/react-spectrum';
+import { View, ActionButton, ButtonGroup, Button } from '@adobe/react-spectrum';
 import { useNavigate, useLocation } from 'react-router-dom';
 import NavigationSection from './NavigationSection';
 import NavigationItem from './NavigationItem';
@@ -62,12 +62,6 @@ const SideNavigation = () => {
   const [hiddenMainItems, setHiddenMainItems] = useState([]);
   const [hiddenSetupItems, setHiddenSetupItems] = useState([]);
   const [isSetupMode, setIsSetupMode] = useState(location.pathname.startsWith('/setup'));
-  const [selectedKey, setSelectedKey] = useState(() => {
-    if (location.pathname.startsWith('/setup')) {
-      return location.pathname.split('/')[2] || 'project-preferences';
-    }
-    return location.pathname.split('/')[1] || 'home';
-  });
   const [expandedSections, setExpandedSections] = useState(() => {
     const saved = localStorage.getItem('expandedSections');
     return saved ? JSON.parse(saved) : {
@@ -75,7 +69,8 @@ const SideNavigation = () => {
       'Work Items': true,
       'Monitoring': true,
       'People & Resourcing': true,
-      'Tools': true
+      'Tools': true,
+      'Hidden items': false
     };
   });
 
@@ -108,7 +103,7 @@ const SideNavigation = () => {
       setExpandedSections(newExpandedSections);
       localStorage.setItem('expandedSections', JSON.stringify(newExpandedSections));
     }
-  }, [location.pathname]);
+  }, [location.pathname, expandedSections]);
 
   const toggleSection = (sectionName) => {
     const newExpandedSections = {
@@ -119,37 +114,21 @@ const SideNavigation = () => {
     localStorage.setItem('expandedSections', JSON.stringify(newExpandedSections));
   };
 
-  // Handle navigation changes
-  const handleSelectionChange = (key) => {
-    setSelectedKey(key);
-    if (key === 'setup') {
-      setIsSetupMode(true);
-      // Get the first setup item's ID from the setupItems array
-      const firstSetupItem = navSetup.setupItems[0];
-      if (firstSetupItem) {
-        navigate(firstSetupItem.path);
-      }
-    } else if (isSetupMode) {
-      navigate(`/setup/${key}`);
-    } else {
-      navigate(`/${key}`);
-    }
-  };
-
   // Handle location changes
   React.useEffect(() => {
     const path = location.pathname;
     const isSetup = path.startsWith('/setup');
     setIsSetupMode(isSetup);
-    
-    if (isSetup) {
-      const setupKey = path.split('/')[2] || 'project-preferences';
-      setSelectedKey(setupKey);
-    } else {
-      const mainKey = path.split('/')[1] || 'home';
-      setSelectedKey(mainKey);
-    }
   }, [location.pathname]);
+
+  const handleSetupNavigation = () => {
+    setIsSetupMode(true);
+    // Navigate to the first setup item's path
+    const firstSetupItem = navSetup.setupItems[0];
+    if (firstSetupItem) {
+      navigate(firstSetupItem.path);
+    }
+  };
 
   // Get the current navigation config based on mode
   const currentConfig = isSetupMode ? navSetup : navMain;
@@ -202,17 +181,6 @@ const SideNavigation = () => {
   const workItems = useMemo(() => !isSetupMode ? mapItemsWithIcons(currentConfig.workItems) : [], [currentConfig, isSetupMode]);
   const monitoringItems = useMemo(() => !isSetupMode ? mapItemsWithIcons(currentConfig.monitoringItems) : [], [currentConfig, isSetupMode]);
   const peopleItems = useMemo(() => !isSetupMode ? mapItemsWithIcons(currentConfig.peopleItems) : [], [currentConfig, isSetupMode]);
-  const toolsItems = useMemo(() => !isSetupMode ? mapItemsWithIcons(currentConfig.toolsItems) : [], [currentConfig, isSetupMode]);
-
-  const allItems = useMemo(() => [
-    ...mainItems,
-    ...setupItems,
-    ...planningItems,
-    ...workItems,
-    ...monitoringItems,
-    ...peopleItems,
-    ...toolsItems
-  ], [mainItems, setupItems, planningItems, workItems, monitoringItems, peopleItems, toolsItems]);
 
   const isItemHidden = (item) => {
     if (isSetupMode) {
@@ -221,17 +189,6 @@ const SideNavigation = () => {
       return hiddenMainItems.some(hiddenItem => hiddenItem.id === item.id);
     }
   };
-
-  const navItems = [
-    { id: 'home', name: 'Home', icon: Home, path: '/', isVisible: true },
-    { id: 'projects', name: 'Projects', icon: Project, path: '/projects', isVisible: true },
-    { id: 'campaigns', name: 'Campaigns', icon: Campaign, path: '/campaigns', isVisible: true },
-    { id: 'reports', name: 'Reports', icon: Report, path: '/reports', isVisible: true },
-    { id: 'boards', name: 'Boards', icon: ViewGrid, path: '/boards', isVisible: true },
-    { id: 'workspaces', name: 'Workspaces', icon: FolderOpen, path: '/workspaces', isVisible: true },
-    { id: 'quick-nav', name: 'My quick navigation', icon: ViewGrid, path: '/quick-nav', isVisible: true },
-    { id: 'tools', name: 'Tools', icon: Settings, path: '/tools', isVisible: true }
-  ];
 
   return (
     <View
@@ -385,13 +342,19 @@ const SideNavigation = () => {
                 showChevron={true}
                 chevronSize="S"
                 chevronType="single"
+                onPress={handleSetupNavigation}
               />
             </NavigationSection>
           </>
         )}
 
         {(isSetupMode ? hiddenSetupItems : hiddenMainItems).length > 0 && (
-          <NavigationSection title="Hidden items" UNSAFE_style={{ marginTop: 'var(--spectrum-global-dimension-size-200)' }}>
+          <NavigationSection 
+            title="Hidden items" 
+            UNSAFE_style={{ marginTop: 'var(--spectrum-global-dimension-size-200)' }}
+            isExpanded={expandedSections['Hidden items']}
+            onToggle={() => toggleSection('Hidden items')}
+          >
             <View className="nav-section">
               {(isSetupMode ? hiddenSetupItems : hiddenMainItems).map(item => (
                 <NavigationItem

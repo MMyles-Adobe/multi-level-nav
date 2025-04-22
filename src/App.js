@@ -2,7 +2,6 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Provider, defaultTheme } from '@adobe/react-spectrum';
 import SideNavigation from './components/SideNavigation';
-import { View } from '@adobe/react-spectrum';
 import HomePage from './pages/HomePage';
 import QuickNavPage from './pages/QuickNavPage';
 import ProductsPage from './pages/ProductsPage';
@@ -25,6 +24,7 @@ import RequestsPage from './pages/RequestsPage';
 import DashboardsPage from './pages/DashboardsPage';
 import ReportsPage from './pages/ReportsPage';
 import AnalyticsPage from './pages/AnalyticsPage';
+import AnalyticsDashboardPage from './pages/AnalyticsDashboardPage';
 import UsersPage from './pages/UsersPage';
 import ResourcingPage from './pages/ResourcingPage';
 import ProjectPreferencesPage from './pages/ProjectPreferencesPage';
@@ -64,6 +64,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Navigate to="/home" replace />} />
               <Route path="/home" element={<HomePage />} />
+              <Route path="/analytics-dashboard" element={<AnalyticsDashboardPage />} />
               <Route path="/quick-nav" element={<QuickNavPage />} />
               <Route path="/products" element={<ProductsPage />} />
               <Route path="/services" element={<ServicesPage />} />
