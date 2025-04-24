@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Provider, defaultTheme } from '@adobe/react-spectrum';
 import SideNavigation from './components/SideNavigation';
 import HomePage from './pages/HomePage';
@@ -57,13 +57,7 @@ import AnalyticsDashboardMetricsPage from './pages/AnalyticsDashboardMetricsPage
 function App() {
   return (
     <Provider theme={defaultTheme}>
-      <BrowserRouter 
-        basename="/multi-level-nav"
-        future={{
-          v7_startTransition: true,
-          v7_relativeSplatPath: true
-        }}
-      >
+      <HashRouter>
         <div style={{ display: 'flex', height: '100vh' }}>
           <SideNavigation />
           <main style={{ flex: 1, padding: '20px', overflow: 'auto' }}>
