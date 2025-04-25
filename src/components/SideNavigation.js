@@ -27,9 +27,14 @@ import ChevronRight from '@spectrum-icons/workflow/ChevronRight';
 import ViewGrid from '@spectrum-icons/workflow/ViewGrid';
 import Alert from '@spectrum-icons/workflow/Alert';
 import Comment from '@spectrum-icons/workflow/Comment';
+import Collection from '@spectrum-icons/workflow/Collection';
 import navMain from '../config/navMain.json';
 import navSetup from '../config/navSetup.json';
 import navDashboard from '../config/navDashboard.json';
+import projectDashboard from '../config/projectDashboard.json';
+import portfolioDashboard from '../config/portfolioDashboard.json';
+import programDashboard from '../config/programDashboard.json';
+import campaignDashboard from '../config/campaignDashboard.json';
 
 const iconMap = {
   Home,
@@ -55,7 +60,17 @@ const iconMap = {
   ChevronRight,
   ViewGrid,
   Alert,
-  Comment
+  Comment,
+  Collection
+};
+
+// Define the mapItemsWithIcons function before using it
+const mapItemsWithIcons = (items) => {
+  if (!items) return [];
+  return items.map(item => ({
+    ...item,
+    icon: iconMap[item.icon] || ViewGrid
+  }));
 };
 
 const SideNavigation = () => {
@@ -68,7 +83,12 @@ const SideNavigation = () => {
   const [hiddenSetupItems, setHiddenSetupItems] = useState([]);
   const [hiddenDashboardItems, setHiddenDashboardItems] = useState([]);
   const [isSetupMode, setIsSetupMode] = useState(location.pathname.startsWith('/setup'));
-  const [isDashboardMode, setIsDashboardMode] = useState(location.pathname.startsWith('/analytics-dashboard'));
+  const [isDashboardMode, setIsDashboardMode] = useState(
+    location.pathname.startsWith('/project/') ||
+    location.pathname.startsWith('/portfolio/') ||
+    location.pathname.startsWith('/program/') ||
+    location.pathname.startsWith('/campaign/')
+  );
   const mainNavRef = useRef(null);
   const setupNavRef = useRef(null);
   const dashboardNavRef = useRef(null);
@@ -84,21 +104,53 @@ const SideNavigation = () => {
     };
   });
 
-  // Get the current navigation config based on mode
-  const currentConfig = useMemo(() => 
-    isDashboardMode ? {
-      ...navMain,
-      dashboardItems: navDashboard.dashboardItems || []
-    } : isSetupMode ? navSetup : navMain,
-    [isSetupMode, isDashboardMode]
-  );
+  // Effect for handling location changes
+  useEffect(() => {
+    const path = location.pathname;
+    const isSetup = path.startsWith('/setup');
+    const isProjectDashboard = path.startsWith('/project/');
+    const isPortfolioDashboard = path.startsWith('/portfolio/');
+    const isProgramDashboard = path.startsWith('/program/');
+    const isCampaignDashboard = path.startsWith('/campaign/');
+    setIsSetupMode(isSetup);
+    setIsDashboardMode(isProjectDashboard || isPortfolioDashboard || isProgramDashboard || isCampaignDashboard);
+  }, [location.pathname]);
 
-  const mapItemsWithIcons = (items) => {
-    return items.map(item => ({
-      ...item,
-      icon: iconMap[item.icon]
-    }));
-  };
+  const currentConfig = useMemo(() => {
+    if (isDashboardMode) {
+      const path = location.pathname;
+      let dashboardConfig;
+      let slug;
+
+      if (path.startsWith('/project/')) {
+        slug = path.split('/')[2];
+        dashboardConfig = projectDashboard;
+      } else if (path.startsWith('/portfolio/')) {
+        slug = path.split('/')[2];
+        dashboardConfig = portfolioDashboard;
+      } else if (path.startsWith('/program/')) {
+        slug = path.split('/')[2];
+        dashboardConfig = programDashboard;
+      } else if (path.startsWith('/campaign/')) {
+        slug = path.split('/')[2];
+        dashboardConfig = campaignDashboard;
+      }
+
+      if (dashboardConfig && slug) {
+        // Create a new object with the dashboard items and their paths
+        const dashboardItems = dashboardConfig.dashboardItems.map(item => ({
+          ...item,
+          path: `/${path.split('/')[1]}/${slug}${item.path}`
+        }));
+
+        return {
+          ...navMain,
+          dashboardItems
+        };
+      }
+    }
+    return isSetupMode ? navSetup : navMain;
+  }, [isSetupMode, isDashboardMode, location.pathname]);
 
   const mainItems = useMemo(() => 
     mapItemsWithIcons(currentConfig.mainItems || []), 
@@ -127,7 +179,7 @@ const SideNavigation = () => {
   );
 
   const dashboardItems = useMemo(() => 
-    isDashboardMode ? mapItemsWithIcons(currentConfig.dashboardItems || []) : [], 
+    isDashboardMode ? mapItemsWithIcons(currentConfig.dashboardItems) : [], 
     [currentConfig, isDashboardMode]
   );
 
@@ -181,18 +233,8 @@ const SideNavigation = () => {
     localStorage.setItem('expandedSections', JSON.stringify(newExpandedSections));
   };
 
-  // Handle location changes
-  React.useEffect(() => {
-    const path = location.pathname;
-    const isSetup = path.startsWith('/setup');
-    const isDashboard = path.startsWith('/analytics-dashboard');
-    setIsSetupMode(isSetup);
-    setIsDashboardMode(isDashboard);
-  }, [location.pathname]);
-
   const handleSetupNavigation = () => {
     setIsSetupMode(true);
-    // Navigate to the first setup item's path
     const firstSetupItem = navSetup.setupItems[0];
     if (firstSetupItem) {
       navigate(firstSetupItem.path);
@@ -297,18 +339,6 @@ const SideNavigation = () => {
             >
               {isSetupMode ? 'Setup' : 'Project'}
             </Text>
-            {isDashboardMode && (
-              <Text
-                UNSAFE_style={{
-                  marginTop: 'var(--spectrum-global-dimension-size-100)',
-                  fontSize: 'var(--spectrum-global-dimension-font-size-100)',
-                  color: 'var(--spectrum-global-color-gray-600)',
-                  display: 'block'
-                }}
-              >
-                Analytics Dashboard Redesign
-              </Text>
-            )}
           </View>
         )}
       </View>
