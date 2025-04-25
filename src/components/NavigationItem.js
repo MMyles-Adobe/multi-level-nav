@@ -10,6 +10,7 @@ import ChevronDoubleRight from '@spectrum-icons/workflow/ChevronDoubleRight';
 import Settings from '@spectrum-icons/workflow/Settings';
 import QuickNavPage from '../pages/QuickNavPage';
 import Popover from './Popover';
+import ViewGrid from '@spectrum-icons/workflow/ViewGrid';
 
 const NavigationItem = ({ item, isCustomizing, onVisibilityChange, isHiddenItem = false, isVisible = true, showChevron = false, chevronSize = "S", chevronType = "single" }) => {
   const navigate = useNavigate();
@@ -100,7 +101,7 @@ const NavigationItem = ({ item, isCustomizing, onVisibilityChange, isHiddenItem 
     }
   };
 
-  const Icon = item.icon === 'Settings' ? Settings : item.icon;
+  const Icon = item.icon || ViewGrid;
   return (
     <View>
       <div

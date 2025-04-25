@@ -88,7 +88,7 @@ function App() {
           <main style={{ flex: 1, overflow: 'auto' }}>
             <View padding="size-200" UNSAFE_style={{ textAlign: 'left' }}>
               <PageBreadcrumbs />
-              <View marginTop="size-200">
+              <View>
                 <Routes>
                   <Route path="/" element={<Navigate to="/home" replace />} />
                   <Route path="/home" element={<HomePage />} />

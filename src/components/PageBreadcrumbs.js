@@ -72,8 +72,11 @@ const PageBreadcrumbs = () => {
   const breadcrumbs = generateBreadcrumbs();
 
   return (
-    <View UNSAFE_style={{ textAlign: 'left' }} width="100%">
-      <Breadcrumbs onAction={key => window.location.hash = key}>
+    <View UNSAFE_style={{ textAlign: 'left' }} width="100%" marginBottom="size-100">
+      <Breadcrumbs 
+        size="S"
+        onAction={key => window.location.hash = key}
+      >
         {breadcrumbs.map((breadcrumb, index) => (
           <Item
             key={breadcrumb.path}
