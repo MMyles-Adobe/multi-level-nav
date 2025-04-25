@@ -28,6 +28,21 @@ import ViewGrid from '@spectrum-icons/workflow/ViewGrid';
 import Alert from '@spectrum-icons/workflow/Alert';
 import Comment from '@spectrum-icons/workflow/Comment';
 import Collection from '@spectrum-icons/workflow/Collection';
+import SocialNetwork from '@spectrum-icons/workflow/SocialNetwork';
+import Book from '@spectrum-icons/workflow/Book';
+import Briefcase from '@spectrum-icons/workflow/Briefcase';
+import Channel from '@spectrum-icons/workflow/Channel';
+import Chat from '@spectrum-icons/workflow/Chat';
+import BulkEditUsers from '@spectrum-icons/workflow/BulkEditUsers';
+import Email from '@spectrum-icons/workflow/Email';
+import WebPage from '@spectrum-icons/workflow/WebPage';
+import Delete from '@spectrum-icons/workflow/Delete';
+import ImageSearch from '@spectrum-icons/workflow/ImageSearch';
+import AssetCheck from '@spectrum-icons/workflow/AssetCheck';
+import Money from '@spectrum-icons/workflow/Money';
+import Monitoring from '@spectrum-icons/workflow/Monitoring';
+import ViewDetail from '@spectrum-icons/workflow/ViewDetail';
+import Refresh from '@spectrum-icons/workflow/Refresh';
 import navMain from '../config/navMain.json';
 import navSetup from '../config/navSetup.json';
 import navDashboard from '../config/navDashboard.json';
@@ -61,7 +76,22 @@ const iconMap = {
   ViewGrid,
   Alert,
   Comment,
-  Collection
+  Collection,
+  SocialNetwork,
+  Book,
+  Briefcase,
+  Channel,
+  Chat,
+  BulkEditUsers,
+  Email,
+  WebPage,
+  Delete,
+  ImageSearch,
+  AssetCheck,
+  Money,
+  Monitoring,
+  ViewDetail,
+  Refresh
 };
 
 // Define the mapItemsWithIcons function before using it

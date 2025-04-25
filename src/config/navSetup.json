@@ -23,7 +23,7 @@
     {
       "id": "processes",
       "name": "Processes",
-      "icon": "Properties",
+      "icon": "Monitoring",
       "path": "/setup/processes"
     },
     {
@@ -95,7 +95,7 @@
     {
       "id": "expense-types",
       "name": "Expense types",
-      "icon": "Document",
+      "icon": "Money",
       "path": "/setup/expense-types"
     },
     {
@@ -113,19 +113,19 @@
     {
       "id": "interface",
       "name": "Interface",
-      "icon": "Settings",
+      "icon": "WebPage",
       "path": "/setup/interface"
     },
     {
       "id": "review-approval",
       "name": "Review & approval",
-      "icon": "Document",
+      "icon": "AssetCheck",
       "path": "/setup/review-approval"
     },
     {
       "id": "proof-settings",
       "name": "Proof settings",
-      "icon": "Settings",
+      "icon": "ImageSearch",
       "path": "/setup/proof-settings"
     },
     {
@@ -143,7 +143,7 @@
     {
       "id": "recycle-bin",
       "name": "Recycle bin",
-      "icon": "Folder",
+      "icon": "Delete",
       "path": "/setup/recycle-bin"
     }
   ]

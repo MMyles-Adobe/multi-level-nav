@@ -1,0 +1,22 @@
+{
+  "dashboardItems": [
+    {
+      "id": "program-details",
+      "name": "Program details",
+      "icon": "ViewDetail",
+      "path": "/details"
+    },
+    {
+      "id": "projects",
+      "name": "Projects",
+      "icon": "Project",
+      "path": "/projects"
+    },
+    {
+      "id": "documents",
+      "name": "Documents",
+      "icon": "Document",
+      "path": "/documents"
+    }
+  ]
+} 

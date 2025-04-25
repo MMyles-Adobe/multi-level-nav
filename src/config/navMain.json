@@ -17,7 +17,7 @@
     {
       "id": "workspaces",
       "name": "Workspaces",
-      "icon": "Folder",
+      "icon": "SocialNetwork",
       "path": "/workspaces"
     },
     {
@@ -41,7 +41,7 @@
     {
       "id": "blueprints",
       "name": "Blueprints",
-      "icon": "Document",
+      "icon": "Book",
       "path": "/blueprints"
     }
   ],
@@ -49,13 +49,13 @@
     {
       "id": "portfolios",
       "name": "Portfolios",
-      "icon": "FolderOpen",
+      "icon": "Briefcase",
       "path": "/portfolios"
     },
     {
       "id": "programs",
       "name": "Programs",
-      "icon": "GraphTrend",
+      "icon": "Channel",
       "path": "/programs"
     },
     {
@@ -79,7 +79,7 @@
     {
       "id": "requests",
       "name": "Requests",
-      "icon": "Help",
+      "icon": "Chat",
       "path": "/requests"
     }
   ],
@@ -113,7 +113,7 @@
     {
       "id": "teams",
       "name": "Teams",
-      "icon": "Group",
+      "icon": "UserGroup",
       "path": "/teams"
     },
     {
@@ -125,7 +125,7 @@
     {
       "id": "resourcing",
       "name": "Resourcing",
-      "icon": "UserGroup",
+      "icon": "BulkEditUsers",
       "path": "/resourcing"
     },
     {

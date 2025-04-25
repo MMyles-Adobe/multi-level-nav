@@ -1,0 +1,46 @@
+{
+  "dashboardItems": [
+    {
+      "id": "project-details",
+      "name": "Project details",
+      "icon": "ViewDetail",
+      "path": "/details"
+    },
+    {
+      "id": "tasks",
+      "name": "Tasks",
+      "icon": "TaskList",
+      "path": "/tasks"
+    },
+    {
+      "id": "planning",
+      "name": "Planning",
+      "icon": "Calendar",
+      "path": "/planning"
+    },
+    {
+      "id": "documents",
+      "name": "Documents",
+      "icon": "Document",
+      "path": "/documents"
+    },
+    {
+      "id": "issues",
+      "name": "Issues",
+      "icon": "Alert",
+      "path": "/issues"
+    },
+    {
+      "id": "updates",
+      "name": "Updates",
+      "icon": "Refresh",
+      "path": "/updates"
+    },
+    {
+      "id": "metrics",
+      "name": "Metrics",
+      "icon": "GraphTrend",
+      "path": "/metrics"
+    }
+  ]
+}

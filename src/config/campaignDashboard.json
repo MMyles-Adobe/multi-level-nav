@@ -1,0 +1,22 @@
+{
+  "dashboardItems": [
+    {
+      "id": "campaign-details",
+      "name": "Campaign details",
+      "icon": "ViewDetail",
+      "path": "/details"
+    },
+    {
+      "id": "projects",
+      "name": "Projects",
+      "icon": "Project",
+      "path": "/projects"
+    },
+    {
+      "id": "assets",
+      "name": "Assets",
+      "icon": "Collection",
+      "path": "/assets"
+    }
+  ]
+}
