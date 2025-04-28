@@ -367,7 +367,12 @@ const SideNavigation = () => {
                 color: 'var(--spectrum-global-color-gray-700)'
               }}
             >
-              {isSetupMode ? 'Setup' : 'Project'}
+              {isSetupMode ? 'Setup' : (
+                location.pathname.startsWith('/portfolio/') ? 'Portfolio' :
+                location.pathname.startsWith('/program/') ? 'Program' :
+                location.pathname.startsWith('/campaign/') ? 'Campaign' :
+                'Project'
+              )}
             </Text>
           </View>
         )}
